@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from dtwin_web import app
 from flask import render_template, make_response
-from random import random
-import time, datetime
 import json
 import socket
 import struct
@@ -13,18 +11,6 @@ from dtwin_web.models import Data
 def index():
     return render_template('index.html', title='Home')
 
-@app.route('/data', methods=["GET", "POST"])            
-def data(): 
-    obj = db.session.query(Data.datetime, Data.temperature, Data.humidity).order_by(db.desc('datetime')).first()  
-    print(obj)      
-    Temperature = obj[1]
-    Humidity = obj[2]
-    data = [obj[0] * 1000, Temperature, Humidity]
-    response = make_response(json.dumps(data))
-    response.content_type = 'application/json'
-    return response
-
-@app.route('/server', methods=["GET", "POST"])    
 def server():
     hostname, port = "", int(5001)
     print(f"Starting up on {hostname} port {port}")
@@ -55,3 +41,14 @@ def server():
         finally:
             clientsocket.close()
             print("Connection closed")
+
+@app.route('/data', methods=["GET", "POST"])            
+def data(): 
+    obj = db.session.query(Data.datetime, Data.temperature, Data.humidity).order_by(db.desc('datetime')).first()  
+    print(obj)      
+    Temperature = obj[1]
+    Humidity = obj[2]
+    data = [obj[0] * 1000, Temperature, Humidity]
+    response = make_response(json.dumps(data))
+    response.content_type = 'application/json'
+    return response
