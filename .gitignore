@@ -1,0 +1,5 @@
+# .gitignore
+__pycache__
+.spyproject
+migrations
+client_tb.py
