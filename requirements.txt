@@ -3,4 +3,6 @@ Flask==2.1.1
 Flask_Bootstrap==3.3.7.1
 Flask_Migrate==3.1.0
 Flask_SQLAlchemy==2.5.1
+redis==4.2.2
+rq==1.10.1
 SQLAlchemy==1.4.22
