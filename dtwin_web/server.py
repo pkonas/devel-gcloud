@@ -8,6 +8,7 @@ import socket
 import struct
 from dtwin_web.models import Data
 
+#vytvory novu app webu pre workera
 app = Flask(__name__)
 app.config.from_object(Config)
 db = SQLAlchemy(app)
@@ -16,6 +17,7 @@ bootstrap = Bootstrap(app)
 
 app.app_context().push()
 
+#vytvorí server na TCP komunikáciu s clientom
 def start_server():
     hostname, port = "", int(5001)
     print(f"Starting up on {hostname} port {port}")
@@ -28,11 +30,11 @@ def start_server():
         clientsocket, address = s.accept()
         try:
             print(f"Connection from {address} has been established.")
-            while True:            
+            while True: 
                 packet = clientsocket.recv(1024)
                 if packet:
                     data = struct.unpack('!ddd', packet)
-                    print(f"Data recieved: {data}")
+                    print(f"Data recieved: {data[0]}")
                     add_data = Data(datetime=data[0],temperature=data[1],humidity=data[2])
                     db.session.add(add_data)
                     db.session.commit()

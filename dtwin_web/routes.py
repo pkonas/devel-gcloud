@@ -11,11 +11,14 @@ def index():
 
 @app.route('/data', methods=["GET", "POST"])            
 def data(): 
-    obj = db.session.query(Data.datetime, Data.temperature, Data.humidity).order_by(db.desc('datetime')).first()  
-    print(obj)      
+    obj = db.session.query(Data.datetime, Data.temperature, Data.humidity).order_by(db.desc('datetime')).first()        
     Temperature = obj[1]
     Humidity = obj[2]
     data = [(obj[0] + 7200) * 1000, Temperature, Humidity] #uprava casu aby ukazaoval +2h
     response = make_response(json.dumps(data))
     response.content_type = 'application/json'
     return response
+
+@app.route('/worker', methods=["GET", "POST"])    
+def worker():   
+    rq_job = app.task_queue.enqueue('dtwin_web.server.start_server',job_timeout=-1)
