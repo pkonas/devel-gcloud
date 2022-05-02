@@ -12,18 +12,26 @@ from werkzeug.urls import url_parse
 
 @app.route('/')
 def index():
-    return render_template('index.html', title='Temperature and humidity')
+    return render_template('index.html', title='Home')
+
+@app.route('/charts')
+def charts():
+    return render_template('charts.html', title='Temperature and humidity')
 
 @app.route('/data', methods=["GET", "POST"])
 @login_required            
 def data(): 
-    obj = db.session.query(Data.datetime, Data.temperature, Data.humidity).order_by(db.desc('datetime')).first()        
-    Temperature = obj[1]
-    Humidity = obj[2]
-    data = [(obj[0] + 7200) * 1000, Temperature, Humidity] #uprava casu aby ukazaoval +2h
-    response = make_response(json.dumps(data))
-    response.content_type = 'application/json'
-    return response
+    datas = Data.query
+    return render_template('data_table.html', title='Data Table',
+                           datas=datas)
+    
+    # obj = db.session.query(Data.datetime, Data.temperature, Data.humidity).order_by(db.desc('datetime')).first()        
+    # Temperature = obj[1]
+    # Humidity = obj[2]
+    # data = [(obj[0] + 7200) * 1000, Temperature, Humidity] #uprava casu aby ukazaoval +2h
+    # response = make_response(json.dumps(data))
+    # response.content_type = 'application/json'
+    # return response
 
 @app.route('/setup', methods=["GET", "POST"])
 @login_required
