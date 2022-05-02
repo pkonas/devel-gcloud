@@ -5,6 +5,7 @@ from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 import rq
 from redis import Redis
+from flask_login import LoginManager
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -13,6 +14,7 @@ migrate = Migrate(app, db)
 bootstrap = Bootstrap(app)
 app.redis = Redis.from_url(app.config['REDIS_URL'])
 app.task_queue = rq.Queue('dtwin-tasks', connection=app.redis)
+login = LoginManager(app)
+login.login_view = 'login'
 
 from dtwin_web import routes,models
-
