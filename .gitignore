@@ -1,4 +1,6 @@
 __pycache__/
+ *.pyc
 .spyproject/
+.vscode/
 migrations/
 client_tb.py

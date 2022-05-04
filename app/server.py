@@ -6,14 +6,10 @@ from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
 import socket
 import struct
-from dtwin_web.models import Data
+from app.models import Data
 
 #vytvory novu app webu pre workera
-app = Flask(__name__)
-app.config.from_object(Config)
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-bootstrap = Bootstrap(app)
+app = create_app()
 
 app.app_context().push()
 

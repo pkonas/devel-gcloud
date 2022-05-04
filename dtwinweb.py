@@ -1,2 +1,5 @@
 # -*- coding: utf-8 -*-
-from dtwin_web import app
+from app import create_app
+
+app = create_app()
+

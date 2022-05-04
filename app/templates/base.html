@@ -1,5 +1,6 @@
 {% extends 'bootstrap/base.html' %}
 
+
 {% block title %}
     {% if title %}{{ title }} - SVS Digital Twin{% else %}Welcome to SVS Digital Twin{% endif %}
 {% endblock %}
@@ -14,20 +15,21 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="{{ url_for('index') }}">SVS FEM DigitalTwin</a>
+                <a class="navbar-brand" href="{{ url_for('main.index') }}">SVS FEM DigitalTwin</a>
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('charts') }}">Temp & Humi</a></li>
-                    <li><a href="{{ url_for('data') }}">Data</a></li>
-                    <li><a href="{{ url_for('setup') }}">Setup</a></li>
+                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
+                    <li><a href="{{ url_for('main.charts') }}">Temp & Humi</a></li>
+                    <li><a href="{{ url_for('main.data') }}">Data</a></li>
+                    <li><a href="{{ url_for('main.setup') }}">Setup</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
-                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('auth.login') }}">Login</a></li>
                     {% else %}
-                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                    <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
+                    <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
                     {% endif %}
                 </ul>
             </div>
