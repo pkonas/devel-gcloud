@@ -26,3 +26,10 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is not None:
             raise ValidationError('Please use a different email address.')
+
+class ResetPasswordForm(FlaskForm):
+    oldpassword = PasswordField('Current password', validators=[DataRequired()])
+    password = PasswordField('New password', validators=[DataRequired()])
+    password2 = PasswordField(
+        'Repeat new password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Request Password Reset')   

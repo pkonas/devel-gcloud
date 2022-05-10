@@ -7,6 +7,7 @@ from flask_bootstrap import Bootstrap
 import socket
 import struct
 from app.models import Data
+from app import create_app
 
 #vytvory novu app webu pre workera
 app = create_app()

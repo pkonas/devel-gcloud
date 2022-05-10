@@ -1,5 +1,81 @@
 {% extends 'bootstrap/base.html' %}
 
+{% block styles %}
+{{super()}}
+ 
+<style>
+ 
+ .navbar-default {
+  background-color: #fed100;
+  border-color: #8d8690;
+}
+.navbar-default .navbar-brand {
+  color: #000000;
+}
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+  color: #605b65;
+}
+.navbar-default .navbar-text {
+  color: #000000;
+}
+.navbar-default .navbar-nav > li > a {
+  color: #000000;
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+  color: #605b65;
+}
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+  color: #605b65;
+  background-color: #8d8690;
+}
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+  color: #605b65;
+  background-color: #8d8690;
+}
+.navbar-default .navbar-toggle {
+  border-color: #8d8690;
+}
+.navbar-default .navbar-toggle:hover,
+.navbar-default .navbar-toggle:focus {
+  background-color: #8d8690;
+}
+.navbar-default .navbar-toggle .icon-bar {
+  background-color: #000000;
+}
+.navbar-default .navbar-collapse,
+.navbar-default .navbar-form {
+  border-color: #000000;
+}
+.navbar-default .navbar-link {
+  color: #000000;
+}
+.navbar-default .navbar-link:hover {
+  color: #605b65;
+}
+
+@media (max-width: 767px) {
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+    color: #000000;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
+    color: #605b65;
+  }
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover,
+  .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
+    color: #605b65;
+    background-color: #8d8690;
+  }
+}
+</style>
+{% endblock %}
 
 {% block title %}
     {% if title %}{{ title }} - SVS Digital Twin{% else %}Welcome to SVS Digital Twin{% endif %}
@@ -22,12 +98,15 @@
                     <li><a href="{{ url_for('main.index') }}">Home</a></li>
                     <li><a href="{{ url_for('main.charts') }}">Temp & Humi</a></li>
                     <li><a href="{{ url_for('main.data') }}">Data</a></li>
-                    <li><a href="{{ url_for('main.setup') }}">Setup</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
                     <li><a href="{{ url_for('auth.login') }}">Login</a></li>
                     {% else %}
+                    {% if current_user.is_admin() %}
+                    <li><a href="{{ url_for('admin.index')}}">Admin</a></li>
+                    <li><a href="{{ url_for('main.setup') }}">Setup</a></li>
+                    {% endif %}
                     <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
                     <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
                     {% endif %}
@@ -38,7 +117,16 @@
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        {% block app_content %}{% endblock %}
-    </div>
+<div class="container">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-info" role="alert">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    {# application content needs to be provided in the app_content block #}
+    {% block app_content %}{% endblock %}
+</div>
 {% endblock %}

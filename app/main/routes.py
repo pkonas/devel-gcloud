@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for
 from app import db
 from app.models import Data,User
 from flask_login import current_user
-from app.main.forms import EditProfileForm
+from app.main.forms import EditProfileForm, SetupForm
 from flask_login import login_required
 from flask import request
 from datetime import datetime
@@ -34,8 +34,14 @@ def data():
 
 @bp.route('/setup', methods=["GET", "POST"])
 @login_required
-def setup():   
-    rq_job = current_app.task_queue.enqueue('app.server.start_server',job_timeout=-1)
+def setup():
+    if current_user.is_admin():
+        form = SetupForm()
+        if form.validate_on_submit():
+            rq_job = current_app.task_queue.enqueue('app.server.start_server',job_timeout=-1)
+            flash('Worker started! You can now recieve data')
+        return render_template('setup.html', title='Setup', form=form)
+    return redirect(url_for('main.index'))
 
 @bp.route('/user/<username>')
 @login_required
@@ -51,7 +57,7 @@ def edit_profile():
         current_user.username = form.username.data
         db.session.commit()
         flash('Your changes have been saved.')
-        return redirect(url_for('main.edit_profile'))
+        return redirect(url_for('main.user',username=current_user.username))
     elif request.method == 'GET':
         form.username.data = current_user.username
     return render_template('edit_profile.html', title='Edit Profile',
