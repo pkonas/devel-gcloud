@@ -1,18 +1,39 @@
 from app.api import bp
-from flask import jsonify, request
+from flask import jsonify, request, make_response
 from app.models import Data
 from flask import url_for
 from app import db
 from app.api.errors import bad_request
 from app.api.auth import token_auth
+import random
+
+def crossdomain(f):
+    def wrapped_function(*args, **kwargs):
+        resp = make_response(f(*args, **kwargs))
+        h = resp.headers
+        h['Access-Control-Allow-Origin'] = '*'
+        h['Access-Control-Allow-Methods'] = "GET, OPTIONS, POST"
+        h['Access-Control-Max-Age'] = str(21600)
+        requested_headers = request.headers.get('Access-Control-Request-Headers')
+        if requested_headers:
+            h['Access-Control-Allow-Headers'] = requested_headers
+        return resp
+    return wrapped_function
 
 @bp.route('/data/last', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_last_data():
-    return jsonify(Data.query.order_by(Data.datetime.desc()).first().to_dict())    
+    return jsonify(Data.query.order_by(Data.datetime.desc()).first().to_dict())   
+
+@bp.route('/data/lastchart', methods=['GET', 'OPTIONS', 'POST'])
+@crossdomain
+#@token_auth.login_required
+def get_last_chartdata():
+    dictionary = Data.query.order_by(Data.datetime.desc()).first().to_dict()  
+    return jsonify({key:[value] for key,value in dictionary.items()}) 
 
 @bp.route('/data', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_alldata():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import base64
 from app import db, login
@@ -33,20 +32,24 @@ class PaginatedAPIMixin(object):
 class Data(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.Float)
-    temperature = db.Column(db.Float)
-    humidity = db.Column(db.Float)
+    pressure1 = db.Column(db.Float)
+    pressure2 = db.Column(db.Float)
+    flow = db.Column(db.Float)
+    valve_position = db.Column(db.Float)
 
     def to_dict(self):
         data = {
             "id" : self.id,
             "datetime" : self.datetime,
-            "temperature" : self.temperature,
-            "humidity" : self.humidity
+            "pressure1" : self.pressure1,
+            "pressure2" : self.pressure2,
+            "flow" : self.flow,
+            "valve_position" : self.valve_position
         }
         return data
 
     def from_dict(self, data):
-        for field in ['datetime', 'temperature', 'humidity']:
+        for field in ['datetime', 'pressure1', 'pressure2', 'flow', 'valve_position' ]:
             if field in data:
                 setattr(self, field, data[field])
 

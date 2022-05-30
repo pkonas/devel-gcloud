@@ -12,16 +12,20 @@
             <thead>
               <tr>
                 <th>DateTime</th>
-                <th>Temperature</th>
-                <th>Humidity</th>
+                <th>Pressure 1</th>
+                <th>Pressure 2</th>
+                <th>Flow</th>
+                <th>Valve position</th>
               </tr>
             </thead>
             <tbody>
               {% for data in datas %}
                 <tr>
                   <td>{{ data.datetime }}</td>
-                  <td>{{ data.temperature }}</td>
-                  <td>{{ data.humidity }}</td>
+                  <td>{{ data.pressure1 }}</td>
+                  <td>{{ data.pressure2 }}</td>
+                  <td>{{ data.flow }}</td>
+                  <td>{{ data.valve_position }}</td>
                 </tr>
               {% endfor %}
             </tbody>

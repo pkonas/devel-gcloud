@@ -9,6 +9,7 @@ from flask_login import login_required
 from flask import request
 from datetime import datetime
 from app.main import bp
+from app.main.charts import livecharts, history_chart
 
 @bp.before_request
 def before_request():
@@ -21,9 +22,17 @@ def before_request():
 def index():
     return render_template('index.html', title='Home')
 
-@bp.route('/charts')
+@bp.route('/charts', methods=["GET", "POST"])
+@login_required 
 def charts():
-    return render_template('charts.html', title='Temperature and humidity')
+    script, div = livecharts()
+    return render_template('charts.html',script=script, div=div, title='Hydraulic live')
+
+@bp.route('/history', methods=["GET", "POST"])
+@login_required 
+def history():
+    script, div = history_chart()
+    return render_template('history.html',script=script, div=div,title='History')
 
 @bp.route('/data', methods=["GET", "POST"])
 @login_required            
