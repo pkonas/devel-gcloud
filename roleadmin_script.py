@@ -24,7 +24,7 @@ def main():
             description=description
         )          
         db.session.add(role)
-        db.session.commit()
+         db.session.commit()
         print ('Role added.')
 
         role = "user"    
