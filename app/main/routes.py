@@ -41,17 +41,6 @@ def data():
     return render_template('data_table.html', title='Data Table',
                            datas=datas)
 
-@bp.route('/setup', methods=["GET", "POST"])
-@login_required
-def setup():
-    if current_user.is_admin():
-        form = SetupForm()
-        if form.validate_on_submit():
-            rq_job = current_app.task_queue.enqueue('app.server.start_server',job_timeout=-1)
-            flash('Worker started! You can now recieve data')
-        return render_template('setup.html', title='Setup', form=form)
-    return redirect(url_for('main.index'))
-
 @bp.route('/user/<username>')
 @login_required
 def user(username):
