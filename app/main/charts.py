@@ -101,30 +101,30 @@ def history_chart():
     p1 = figure(height=height, width=width, title="Pressure", sizing_mode="stretch_width", x_axis_type="datetime",
     y_axis_label="Pressure [Pa]", x_axis_label="Time", tooltips=tooltips, tools=TOOLS)
     p1.line("datetime", "pressure1", source=source, line_width=2, color="navy", legend="Pressure1")
-    p1.circle("datetime", "pressure1", source=source, size=10, color="navy", fill_color="white")
+    #p1.circle("datetime", "pressure1", source=source, size=10, color="navy", fill_color="white")
 
     p1.line("datetime", "pressure2", source=source, line_width=2, color="firebrick", legend="Pressure2")
-    p1.triangle("datetime", "pressure2", source=source, size=10, color="firebrick", fill_color="white")
+    #p1.triangle("datetime", "pressure2", source=source, size=10, color="firebrick", fill_color="white")
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
     y_axis_label="Flow rate [m3/h]",  x_axis_label="Time", tooltips=tooltips, x_range=p1.x_range,  tools=TOOLS)
     p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow")
-    p2.circle("datetime", "flow1", source=source, size=10, color="navy", fill_color="white")
+    #p2.circle("datetime", "flow1", source=source, size=10, color="navy", fill_color="white")
 
     p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", legend="Flow2")
-    p2.triangle("datetime", "flow2", source=source, size=10, color="firebrick", fill_color="white")  
+    #p2.triangle("datetime", "flow2", source=source, size=10, color="firebrick", fill_color="white")  
 
     p3 = figure(height=height, width=width, title="Valve position", x_axis_type="datetime", y_range=(0, 100),
     sizing_mode="stretch_width", y_axis_label="Position [-]", x_axis_label="Time", tooltips=tooltips, x_range=p1.x_range,
     tools=TOOLS)
     p3.line("datetime", "valve_position", source=source, line_width=2, color="olive", legend="Valve position")
-    p3.circle("datetime", "valve_position", source=source, size=10, color="olive", fill_color="white")
+    #p3.circle("datetime", "valve_position", source=source, size=10, color="olive", fill_color="white")
 
     p4 = figure(height=height, width=width, title="Temperature", x_axis_type="datetime",
     sizing_mode="stretch_width", y_axis_label="Temperature [°C]", x_axis_label="Time", tooltips=tooltips, x_range=p1.x_range,
     tools=TOOLS)
     p4.line("datetime", "temperature", source=source, line_width=2, color="orange", legend="Temperature")
-    p4.circle("datetime", "temperature", source=source, size=10, color="orange", fill_color="white")
+    #p4.circle("datetime", "temperature", source=source, size=10, color="orange", fill_color="white")
 
     p1.legend.location = "top_left"
     p1.legend.click_policy="hide"
