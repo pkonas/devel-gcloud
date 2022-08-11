@@ -10,7 +10,7 @@ from bokeh.embed import components
 
 def livecharts():
     # setup AjaxDataSource with URL and polling interval
-    source = AjaxDataSource(data_url='http://127.0.0.1:5000/api/data/lastchart', 
+    source = AjaxDataSource(data_url='https://twins.svsfem.cz/api/data/lastchart', 
                             polling_interval=8000, method= "GET", mode='append')
     tooltips = [
         ("x", "$x"),
