@@ -34,7 +34,9 @@ class Data(PaginatedAPIMixin, db.Model):
     datetime = db.Column(db.Float)
     pressure1 = db.Column(db.Float)
     pressure2 = db.Column(db.Float)
-    flow = db.Column(db.Float)
+    flow1 = db.Column(db.Float)
+    flow2 = db.Column(db.Float)
+    temperature = db.Column(db.Float)
     valve_position = db.Column(db.Float)
 
     def to_dict(self):
@@ -43,13 +45,15 @@ class Data(PaginatedAPIMixin, db.Model):
             "datetime" : self.datetime,
             "pressure1" : self.pressure1,
             "pressure2" : self.pressure2,
-            "flow" : self.flow,
+            "flow1" : self.flow1,
+            "flow2" : self.flow2,
+            "temperature" : self.temperature,
             "valve_position" : self.valve_position
         }
         return data
 
     def from_dict(self, data):
-        for field in ['datetime', 'pressure1', 'pressure2', 'flow', 'valve_position' ]:
+        for field in ['datetime', 'pressure1', 'pressure2', 'flow1', 'flow2', 'temperature', 'valve_position' ]:
             if field in data:
                 setattr(self, field, data[field])
 

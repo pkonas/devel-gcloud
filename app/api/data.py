@@ -25,14 +25,14 @@ def crossdomain(f):
 def get_last_data():
     return jsonify(Data.query.order_by(Data.datetime.desc()).first().to_dict())   
 
-@bp.route('/data/lastchart', methods=['GET', 'OPTIONS', 'POST'])
+@bp.route('/data/lastchart', methods=['GET'])
 @crossdomain
 #@token_auth.login_required
 def get_last_chartdata():
     dictionary = Data.query.order_by(Data.datetime.desc()).first().to_dict()  
     return jsonify({key:[value] for key,value in dictionary.items()}) 
 
-@bp.route('/data', methods=['GET'])
+@bp.route('/data/all', methods=['GET'])
 #@token_auth.login_required
 def get_alldata():
     page = request.args.get('page', 1, type=int)
@@ -41,7 +41,7 @@ def get_alldata():
     return jsonify(data)
 
 @bp.route('/data', methods=['POST'])
-@token_auth.login_required
+#@token_auth.login_required
 def add_data():
     jsondata = request.get_json()
     data=Data()
