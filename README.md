@@ -1,4 +1,4 @@
-# GDT - Geometrical Dimensioning and Tolerancing
+# DTwin Web - Digital Twin Web application
 
     Type: **Product**
     Responsible: **Jakub Oravec**
