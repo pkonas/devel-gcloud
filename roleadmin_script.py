@@ -1,5 +1,6 @@
-"""Create a new admin and user."""
+"""Create a new admin user able to view the /reports endpoint."""
 from werkzeug.security import generate_password_hash
+from getpass import getpass
 import sys
 
 from flask import current_app
@@ -9,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 
 def main():
+    """Main entry point for script."""
     app = create_app()
     db = SQLAlchemy()
     db.init_app(app)

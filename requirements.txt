@@ -10,10 +10,11 @@ Flask-HTTPAuth==4.6.0
 WTForms==3.0.1
 Flask-WTF==1.0.1
 redis==4.2.2
+rq==1.10.1
 SQLAlchemy==1.4.22
 email-validator==1.2.1 
 gunicorn==20.1.0
 bokeh==2.4.3 
-Werkzeug==2.2.2
+Werkzeug==2.1.2
 pandas==1.4.3 
 numpy==1.23.0 
