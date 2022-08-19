@@ -4,7 +4,7 @@ from flask import render_template, flash, redirect, url_for
 from app import db
 from app.models import Data,User
 from flask_login import current_user
-from app.main.forms import EditProfileForm, SetupForm
+from app.main.forms import EditProfileForm
 from flask_login import login_required
 from flask import request
 from datetime import datetime
@@ -40,17 +40,6 @@ def data():
     datas = Data.query
     return render_template('data_table.html', title='Data Table',
                            datas=datas)
-
-@bp.route('/setup', methods=["GET", "POST"])
-@login_required
-def setup():
-    if current_user.is_admin():
-        form = SetupForm()
-        if form.validate_on_submit():
-            rq_job = current_app.task_queue.enqueue('app.server.start_server',job_timeout=-1)
-            flash('Worker started! You can now recieve data')
-        return render_template('setup.html', title='Setup', form=form)
-    return redirect(url_for('main.index'))
 
 @bp.route('/user/<username>')
 @login_required

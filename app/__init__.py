@@ -3,8 +3,6 @@ from config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_bootstrap import Bootstrap
-import rq
-from redis import Redis
 from flask_login import LoginManager
 from flask_admin import Admin
 
@@ -24,9 +22,6 @@ def create_app(config_class=Config):
     login.init_app(app)
     bootstrap.init_app(app)
     admin.init_app(app)    
-
-    app.redis = Redis.from_url(app.config['REDIS_URL'])
-    app.task_queue = rq.Queue('dtwin-tasks', connection=app.redis)
 
     from app.errors import bp as errors_bp
     app.register_blueprint(errors_bp)

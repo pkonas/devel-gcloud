@@ -5,7 +5,6 @@ from flask import url_for
 from app import db
 from app.api.errors import bad_request
 from app.api.auth import token_auth
-import random
 
 def crossdomain(f):
     def wrapped_function(*args, **kwargs):

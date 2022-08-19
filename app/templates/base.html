@@ -106,7 +106,6 @@
                     {% else %}
                     {% if current_user.is_admin() %}
                     <li><a href="{{ url_for('admin.index')}}">Admin</a></li>
-                    <li><a href="{{ url_for('main.setup') }}">Setup</a></li>
                     {% endif %}
                     <li><a href="{{ url_for('main.user', username=current_user.username) }}">Profile</a></li>
                     <li><a href="{{ url_for('auth.logout') }}">Logout</a></li>
