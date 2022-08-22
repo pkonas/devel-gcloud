@@ -10,7 +10,7 @@ from bokeh.embed import components
 
 def livecharts():
     # setup AjaxDataSource with URL and polling interval
-    source = AjaxDataSource(data_url='https://twins.svsfem.cz/api/data/lastchart', 
+    source = AjaxDataSource(data_url='https://twin.svsfem.cz/api/data/lastchart', 
                             polling_interval=8000, method= "GET", mode='append')
     tooltips = [
         ("x", "$x"),
@@ -78,7 +78,7 @@ def livecharts():
     # )
     
 
-    script, div = components(column(p3,p1,p2,p4))
+    script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'))
     return script, div
 
 def history_chart():
@@ -140,5 +140,5 @@ def history_chart():
     """))
 
     p1.yaxis.formatter = NumeralTickFormatter(format="0 a")
-    script, div = components(column(p3,p1,p2,p4),column(datetime_range_slider))
+    script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'),column(datetime_range_slider))
     return script, div
