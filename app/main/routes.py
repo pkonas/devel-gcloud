@@ -1,13 +1,14 @@
-# -*- coding: utf-8 -*-
+from datetime import datetime
+
 from flask import current_app
 from flask import render_template, flash, redirect, url_for
+from flask import request
+from flask_login import current_user
+from flask_login import login_required
+
 from app import db
 from app.models import Data,User
-from flask_login import current_user
 from app.main.forms import EditProfileForm
-from flask_login import login_required
-from flask import request
-from datetime import datetime
 from app.main import bp
 from app.main.charts import livecharts, history_chart
 
@@ -60,3 +61,4 @@ def edit_profile():
         form.username.data = current_user.username
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
+    

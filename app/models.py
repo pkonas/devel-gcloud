@@ -31,7 +31,7 @@ class PaginatedAPIMixin(object):
         
 class Data(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    datetime = db.Column(db.Float)
+    datetime = db.Column(db.DateTime)
     pressure1 = db.Column(db.Float)
     pressure2 = db.Column(db.Float)
     flow1 = db.Column(db.Float)
@@ -53,6 +53,7 @@ class Data(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data):
+        data["datetime"] = datetime.fromisoformat(data["datetime"])
         for field in ['datetime', 'pressure1', 'pressure2', 'flow1', 'flow2', 'temperature', 'valve_position' ]:
             if field in data:
                 setattr(self, field, data[field])
