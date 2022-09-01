@@ -125,6 +125,6 @@ class Role(db.Model):
     name = db.Column(db.String(64), unique=True)
     description = db.Column(db.String(255))
 
-       
 
-        
+
+
