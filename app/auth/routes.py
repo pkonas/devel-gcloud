@@ -47,7 +47,7 @@ def register():
 @bp.route('/reset_password/<username>', methods=['GET', 'POST'])
 @login_required
 def reset_password(username):
-    user = User.query.filter_by(username==username).first_or_404()
+    user = User.query.filter_by().first_or_404()
     if username != current_user.username:
         flash('You can not change password of other users!')
         return redirect(url_for('main.index'))

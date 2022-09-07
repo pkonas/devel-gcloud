@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <head>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.25/css/dataTables.bootstrap5.css">
+    </head>
+    <body>
+        <div class="container">
+          <h1>{{ title }}</h1>
+          <hr>
+          <table id="data" class="table table-striped">
+            <thead>
+              <tr>
+                <th>DateTime</th>
+                <th>Pressure 1</th>
+                <th>Pressure 2</th>               
+                <th>Flow 1</th>
+                <th>Flow 2</th>
+                <th>ManometrMonitor</th>
+                <th>Pump pressure rise</th>
+                <th>Ball balve Pressure drop</th>
+                <th>Bend pressure drop</th>
+                <th>Control valve static pressure diff</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for data in datas %}
+                <tr>
+                  <td>{{ data.datetime }}</td>
+                  <td>{{ data.PressureMonitor1 }}</td>
+                  <td>{{ data.PressureMonitor2 }}</td>
+                  <td>{{ data.FlowMonitor1 }}</td>
+                  <td>{{ data.FlowMonitor2 }}</td>
+                  <td>{{ data.ManometrMonitor }}</td>
+                  <td>{{ data.Pump_pressure_rise }}</td>
+                  <td>{{ data.Ball_Valve_Pressure_drop }}</td>
+                  <td>{{ data.Bend_Pressure_drop }}</td>
+                  <td>{{ data.Control_Valve_Static_pressure_diff }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.25/js/dataTables.bootstrap5.js"></script>
+        {% block scripts %}
+          <script>
+            $(document).ready(function () {
+              $('#data').DataTable();
+            });
+          </script>        
+        {% endblock %}
+    </body>
+{% endblock %}

@@ -1,6 +1,6 @@
 from flask_login import current_user
 from flask import redirect, url_for
-from app.models import User, Data, Role
+from app.models import User, Data, FmuData, Role
 from app import admin, db
 from flask_admin.contrib.sqla import ModelView
 
@@ -17,4 +17,5 @@ class DTwinModelView(ModelView):
 
 admin.add_view(DTwinModelView(User, db.session))
 admin.add_view(DTwinModelView(Data, db.session))
+admin.add_view(DTwinModelView(FmuData, db.session))
 admin.add_view(DTwinModelView(Role, db.session))

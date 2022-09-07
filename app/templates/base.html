@@ -99,6 +99,8 @@
                     <li><a href="{{ url_for('main.charts') }}">Live</a></li>
                     <li><a href="{{ url_for('main.history') }}">History</a></li>
                     <li><a href="{{ url_for('main.data') }}">Data</a></li>
+                    <li><a href="{{ url_for('main.simulationdata') }}">Sim Data</a></li>
+                    <li><a href="{{ url_for('main.set_valve') }}">Set valve</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}

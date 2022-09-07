@@ -27,8 +27,11 @@ class PaginatedAPIMixin(object):
                                 **kwargs) if resources.has_prev else None
             }
         }
-        return data 
-        
+        return data
+
+class ValveOpening:
+    current_value = 100
+
 class Data(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
@@ -61,6 +64,43 @@ class Data(PaginatedAPIMixin, db.Model):
 role_user_table = db.Table('role_user',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
+
+class FmuData(PaginatedAPIMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    datetime = db.Column(db.DateTime)
+    Ball_Valve_Pressure_drop = db.Column(db.Float)
+    Bend_Pressure_drop = db.Column(db.Float)
+    Control_Valve_Static_pressure_diff = db.Column(db.Float)
+    Pump_pressure_rise = db.Column(db.Float)
+    ManometrMonitor = db.Column(db.Float)
+    FlowMonitor1 = db.Column(db.Float)
+    FlowMonitor2 = db.Column(db.Float)
+    PressureMonitor1 = db.Column(db.Float)
+    PressureMonitor2 = db.Column(db.Float)
+    
+    def from_dict(self, data):
+        data["datetime"] = datetime.fromisoformat(data["datetime"])
+        for field in ['datetime', 'Ball_Valve_Pressure_drop', 'Bend_Pressure_drop',
+                      'Control_Valve_Static_pressure_diff', 'FlowMonitor1', 'FlowMonitor2',
+                      'ManometrMonitor','PressureMonitor1','PressureMonitor2','Pump_pressure_rise']:
+            if field in data:
+                setattr(self, field, data[field])
+                
+    def to_dict(self):
+        data = {
+            "id" : self.id,
+            "datetime" : self.datetime,
+            "Ball_Valve_Pressure_drop" : self.Ball_Valve_Pressure_drop,
+            "Bend_Pressure_drop" : self.Bend_Pressure_drop,
+            "Control_Valve_Static_pressure_diff" : self.Control_Valve_Static_pressure_diff,
+            "FlowMonitor1" : self.FlowMonitor1,
+            "FlowMonitor2" : self.FlowMonitor2,
+            "ManometrMonitor" : self.ManometrMonitor,
+            "PressureMonitor1" : self.PressureMonitor1,
+            "PressureMonitor2" : self.PressureMonitor2,
+            "Pump_pressure_rise" : self.Pump_pressure_rise
+        }
+        return data
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

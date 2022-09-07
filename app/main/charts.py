@@ -10,9 +10,12 @@ from bokeh.embed import components
 
 def livecharts():
     # setup AjaxDataSource with URL and polling interval
+    #'https://twin.svsfem.cz/api/data/lastchart'
+    #'http://127.0.0.1:5000/api/data/lastchart'
     source = AjaxDataSource(data_url='https://twin.svsfem.cz/api/data/lastchart',
-                            polling_interval=8000, method= "GET", mode='append')
+                            polling_interval=5000, method= "GET", mode='append')
     print(source)
+    
     tooltips = [
         ("time", "@datetime{%F %T}"),        
         ("value", "$y{0.0}"),
@@ -27,19 +30,29 @@ def livecharts():
 
     p1 = figure(height=height, width=width, title="Pressure", sizing_mode="stretch_width",x_axis_type="datetime",
     y_axis_label="Pressure [Pa]", x_axis_label="Time", tools=TOOLS)
+    
     p1.line("datetime", "pressure1", source=source, line_width=2, color="navy", legend="Pressure1")
     p1.circle("datetime", "pressure1", source=source, size=10, color="navy", fill_color="white")
-
     p1.line("datetime", "pressure2", source=source, line_width=2, color="firebrick", legend="Pressure2")
-    p1.triangle("datetime", "pressure2", source=source, size=10, color="firebrick", fill_color="white")
+    p1.square("datetime", "pressure2", source=source, size=10, color="firebrick", fill_color="white")
+    
+    p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy",line_dash="dashed", legend="DT Pressure1")
+    p1.circle_x("datetime", "PressureMonitor1", source=source, size=10, color="navy", fill_color="white")
+    p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick",line_dash="dashed", legend="DT Pressure2")
+    p1.square_x("datetime", "PressureMonitor2", source=source, size=10, color="firebrick", fill_color="white")
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
     y_axis_label="Flow rate [l/h]",  x_axis_label="Time", x_range=p1.x_range, tools=TOOLS)
-    p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow1")
-    p2.circle("datetime", "flow1", source=source, size=10, color="navy", fill_color="white")
 
-    p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", legend="Flow2")
-    p2.triangle("datetime", "flow2", source=source, size=10, color="firebrick", fill_color="white")   
+    p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", legend="Flow1")
+    p2.circle("datetime", "FlowMonitor1", source=source, size=10, color="navy", fill_color="white")
+    p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", legend="Flow2")
+    p2.triangle("datetime", "FlowMonitor2", source=source, size=10, color="firebrick", fill_color="white")   
+    
+    p2.line("datetime", "flow1", source=source, line_width=2, color="navy", line_dash="dashed", legend="DT Flow1")
+    p2.circle_x("datetime", "flow1", source=source, size=10, color="navy", fill_color="white")
+    p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Flow2")
+    p2.square_x("datetime", "flow2", source=source, size=10, color="firebrick", fill_color="white")  
 
     p3 = figure(height=height, width=width, title="Valve position", x_axis_type="datetime", y_range=(0, 100),
     sizing_mode="stretch_width", y_axis_label="Position [-]", x_axis_label="Time", x_range=p1.x_range,
@@ -88,10 +101,17 @@ def livecharts():
     return script, div
 
 def history_chart():
-    sql_query = pd.read_sql("data",'sqlite:///app.db',index_col=["id"],coerce_float=False,
+    sql_query1 = pd.read_sql("data",'sqlite:///app.db',index_col=["id"],coerce_float=False,
                             columns=["datetime","pressure1","pressure2","flow1","flow2","temperature","valve_position"],
                             parse_dates=["datetime"])
-    df = pd.DataFrame(sql_query)
+    sql_query2 = pd.read_sql("fmu_data",'sqlite:///app.db',index_col=["id"],coerce_float=False,
+                            columns=['datetime', 'Ball_Valve_Pressure_drop', 'Bend_Pressure_drop',
+                                    'Control_Valve_Static_pressure_diff', 'FlowMonitor1', 'FlowMonitor2',
+                                    'ManometrMonitor','PressureMonitor1','PressureMonitor2','Pump_pressure_rise'],
+                            parse_dates=["datetime"])
+    df1 = pd.DataFrame(sql_query1)
+    df2 = pd.DataFrame(sql_query2)
+    df = pd.concat([df1, df2], axis=1)
     source = ColumnDataSource(df)
     
     tooltips = [
@@ -108,15 +128,19 @@ def history_chart():
 
     p1 = figure(height=height, width=width, title="Pressure", sizing_mode="stretch_width", x_axis_type="datetime",
     y_axis_label="Pressure [Pa]", x_axis_label="Time", tools=TOOLS)
-    p1.line("datetime", "pressure1", source=source, line_width=2, color="navy", legend="Pressure1")
 
+    p1.line("datetime", "pressure1", source=source, line_width=2, color="navy", legend="Pressure1")
     p1.line("datetime", "pressure2", source=source, line_width=2, color="firebrick", legend="Pressure2")
+    p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy", line_dash="dashed",legend="DT Pressure1")
+    p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Pressure2")    
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
     y_axis_label="Flow rate [m3/h]",  x_axis_label="Time", x_range=p1.x_range,  tools=TOOLS)
-    p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow")
-
+    
+    p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow1")
     p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", legend="Flow2")
+    p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", line_dash="dashed", legend="DT Flow1")
+    p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Flow2")   
 
     p3 = figure(height=height, width=width, title="Valve position", x_axis_type="datetime", y_range=(0, 100),
     sizing_mode="stretch_width", y_axis_label="Position [-]", x_axis_label="Time", x_range=p1.x_range,

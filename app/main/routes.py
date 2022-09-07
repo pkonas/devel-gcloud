@@ -7,9 +7,9 @@ from flask_login import current_user
 from flask_login import login_required
 
 from app import db
-from app.models import Data,User
-from app.main.forms import EditProfileForm
-from app.main import bp
+from app.models import Data, User, FmuData
+from app.main.forms import EditProfileForm, ValveForm
+from app.main import bp, valve_opening
 from app.main.charts import livecharts, history_chart
 
 @bp.before_request
@@ -24,13 +24,11 @@ def index():
     return render_template('index.html', title='Home')
 
 @bp.route('/charts', methods=["GET", "POST"])
-@login_required 
 def charts():
     script, div = livecharts()
     return render_template('charts.html',script=script, div=div, title='Hydraulic live')
 
 @bp.route('/history', methods=["GET", "POST"])
-@login_required 
 def history():
     script, div = history_chart()
     return render_template('history.html',script=script, div=div,title='History')
@@ -41,6 +39,24 @@ def data():
     datas = Data.query
     return render_template('data_table.html', title='Data Table',
                            datas=datas)
+
+@bp.route('/simulationdata', methods=["GET", "POST"])
+@login_required            
+def simulationdata(): 
+    datas = FmuData.query
+    return render_template('fmu_table.html', title='Digital twin data table',
+                           datas=datas)
+
+@bp.route('/setvalve', methods=["GET", "POST"])
+@login_required
+def set_valve():
+    form = ValveForm()
+    if request.method == 'POST':
+        valve_opening.current_value = form.valve_opening.data
+        print(valve_opening.current_value)
+        flash('Control valve opening has been set!')
+        #return redirect(url_for('main.charts'))
+    return render_template('set_valve.html', form=form,title='Control valve')       
 
 @bp.route('/user/<username>')
 @login_required
