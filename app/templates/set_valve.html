@@ -23,7 +23,7 @@ function outputUpdate(valve_opening) {
 <form method="POST">
     <p>
        {{ form.valve_opening.label }}:
-       {{ form.valve_opening(min=0, max=100, oninput="outputUpdate(value)") }}
+       {{ form.valve_opening(min=1, max=100, oninput="outputUpdate(value)") }}
        <output for="Control valve opening" id="valve-opening">{{ form.valve_opening.data }}</output>
     </p>
     <div class="row">{{ form.submit(class_ = "button") }}</div>

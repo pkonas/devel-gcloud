@@ -10,9 +10,9 @@ from flask_login import login_required
 
 from app import db
 from app import turbo
-from app.models import Data, User, FmuData
+from app.models import Data, User, FmuData, ValveOpening
 from app.main.forms import EditProfileForm, ValveForm
-from app.main import bp, valve_opening
+from app.main import bp
 from app.main.charts import livecharts, history_chart
 
 @bp.before_request
@@ -66,9 +66,10 @@ def simulationdata():
 @login_required
 def set_valve():
     form = ValveForm()
-    if request.method == 'POST':
-        valve_opening.current_value = form.valve_opening.data
-        print(valve_opening.current_value)
+    if form.is_submitted():
+        valve = ValveOpening(valve_value=form.valve_opening.data)
+        db.session.add(valve)
+        db.session.commit()
         flash('Control valve opening has been set!')
         #return redirect(url_for('main.charts'))
     return render_template('set_valve.html', form=form,title='Control valve')       

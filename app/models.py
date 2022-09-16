@@ -29,8 +29,15 @@ class PaginatedAPIMixin(object):
         }
         return data
 
-class ValveOpening:
-    current_value = 100
+class ValveOpening(PaginatedAPIMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    valve_value = db.Column(db.Integer)
+    
+    def to_dict(self):
+        data = {
+            "datetime" : self.valve_value
+        }
+        return data
 
 class Data(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)

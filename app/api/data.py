@@ -1,11 +1,10 @@
 from app.api import bp
 from flask import jsonify, request, make_response
-from app.models import Data, FmuData
+from app.models import Data, FmuData, ValveOpening
 from flask import url_for
 from app import db
 from app.api.errors import bad_request
 from app.api.auth import token_auth
-from app.main import valve_opening
 
 def crossdomain(f):
     def wrapped_function(*args, **kwargs):
@@ -28,7 +27,9 @@ def get_last_data():
 @bp.route('/data/valve', methods=['GET'])
 @token_auth.login_required
 def get_valve_data():
-    return jsonify(valve_opening.current_value)  
+    valve = ValveOpening.query.order_by(ValveOpening.id.desc()).first().to_dict()   
+    print(valve) 
+    return valve 
 
 @bp.route('/data/lastchart', methods=['GET'])
 @crossdomain

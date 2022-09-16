@@ -2,8 +2,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField,IntegerRangeField
 from wtforms.validators import ValidationError, DataRequired
-from app.models import User
-from app.main import valve_opening
+from app.models import User, ValveOpening
 
 class EditProfileForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -20,5 +19,5 @@ class EditProfileForm(FlaskForm):
                 raise ValidationError('Please use a different username.')
             
 class ValveForm(FlaskForm):
-    valve_opening = IntegerRangeField('Control valve opening', default=valve_opening.current_value)
+    valve_opening = IntegerRangeField('Control valve opening', default=100)
     submit = SubmitField('Set')
