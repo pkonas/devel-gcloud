@@ -6,7 +6,8 @@ from bokeh.plotting import show, figure
 from bokeh.models import ColumnDataSource, AjaxDataSource, DatetimeTickFormatter, NumeralTickFormatter, CustomJS, DatetimeRangeSlider, HoverTool
 from bokeh.io import curdoc
 from bokeh.embed import components
-
+from bokeh.transform import factor_cmap    
+from bokeh.palettes import Spectral5
 
 def livecharts():
     # setup AjaxDataSource with URL and polling interval
@@ -14,13 +15,12 @@ def livecharts():
     #'http://127.0.0.1:5000/api/data/lastchart'
     source = AjaxDataSource(data_url='https://twin.svsfem.cz/api/data/lastchart',
                             polling_interval=5000, method= "GET", mode='append')
-    print(source)
-    
+
     tooltips = [
-        ("time", "@datetime{%F %T}"),        
+        ("time", "@datetime{%F %T}"),
         ("value", "$y{0.0}"),
     ]
-  
+
     TOOLS = "pan,box_zoom,wheel_zoom,lasso_select,save,reset"
 
     # use the AjaxDataSource just like a ColumnDataSource
@@ -30,12 +30,12 @@ def livecharts():
 
     p1 = figure(height=height, width=width, title="Pressure", sizing_mode="stretch_width",x_axis_type="datetime",
     y_axis_label="Pressure [Pa]", x_axis_label="Time", tools=TOOLS)
-    
+
     p1.line("datetime", "pressure1", source=source, line_width=2, color="navy", legend="Pressure1")
     p1.circle("datetime", "pressure1", source=source, size=10, color="navy", fill_color="white")
     p1.line("datetime", "pressure2", source=source, line_width=2, color="firebrick", legend="Pressure2")
     p1.square("datetime", "pressure2", source=source, size=10, color="firebrick", fill_color="white")
-    
+
     p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy",line_dash="dashed", legend="DT Pressure1")
     p1.circle_x("datetime", "PressureMonitor1", source=source, size=10, color="navy", fill_color="white")
     p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick",line_dash="dashed", legend="DT Pressure2")
@@ -48,7 +48,7 @@ def livecharts():
     p2.circle("datetime", "FlowMonitor1", source=source, size=10, color="navy", fill_color="white")
     p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", legend="Flow2")
     p2.triangle("datetime", "FlowMonitor2", source=source, size=10, color="firebrick", fill_color="white")   
-    
+
     p2.line("datetime", "flow1", source=source, line_width=2, color="navy", line_dash="dashed", legend="DT Flow1")
     p2.circle_x("datetime", "flow1", source=source, size=10, color="navy", fill_color="white")
     p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Flow2")
@@ -80,10 +80,10 @@ def livecharts():
     p2.legend.click_policy="hide"
     p3.legend.location = "top_left"
     p4.legend.location = "top_left"
-    
-    p1.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime' }))
-    p2.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))    
-    p3.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))    
+
+    p1.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
+    p2.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
+    p3.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
     p4.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
 
     p1.yaxis.formatter = NumeralTickFormatter(format="0 a")
@@ -95,7 +95,6 @@ def livecharts():
     #     months=["%H:%M:%S"],
     #     years=["%H:%M:%S"],
     # )
-    
 
     script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'))
     return script, div
@@ -113,12 +112,12 @@ def history_chart():
     df2 = pd.DataFrame(sql_query2)
     df = pd.concat([df1, df2], axis=1)
     source = ColumnDataSource(df)
-    
+
     tooltips = [
         ("time", "@datetime{%F %T}"),        
         ("value", "$y{0.0}"),
     ]
-    
+
     TOOLS = "pan,box_zoom,wheel_zoom,lasso_select,save,reset"
 
     # use the AjaxDataSource just like a ColumnDataSource
@@ -136,7 +135,7 @@ def history_chart():
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
     y_axis_label="Flow rate [m3/h]",  x_axis_label="Time", x_range=p1.x_range,  tools=TOOLS)
-    
+
     p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow1")
     p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", legend="Flow2")
     p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", line_dash="dashed", legend="DT Flow1")
@@ -156,7 +155,7 @@ def history_chart():
     p2.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))    
     p3.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))    
     p4.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
-        
+
     p1.legend.location = "top_left"
     p1.legend.click_policy="hide"
     p2.legend.location = "top_left"
@@ -176,5 +175,4 @@ def history_chart():
     p3.xaxis.formatter = DatetimeTickFormatter(months = "%b %Y")
     p4.xaxis.formatter = DatetimeTickFormatter(months = "%b %Y")
     script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'),column(datetime_range_slider))
-    
     return script, div

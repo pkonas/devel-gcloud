@@ -1,0 +1,52 @@
+table {
+    table-layout: fixed;
+    width: 60%;
+    border-collapse: collapse;
+    border: 6px solid #fed100;
+  }
+  
+  thead th:nth-child(1) {
+    width: 30%;
+  }
+  
+  thead th:nth-child(2) {
+    width: 20%;
+  }
+  
+  thead th:nth-child(3) {
+    width: 15%;
+  }
+  
+  thead th:nth-child(4) {
+    width: 35%;
+  }
+  
+  th,
+  td {
+    padding: 20px;
+  }
+
+  /* typography */
+
+tbody td {
+  text-align: center;
+}
+
+/* zebra striping */
+
+tbody tr:nth-child(odd) {
+  background-color: white;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #eaeaeaef;
+}
+
+table {
+  background-color: #eaeaeaef;
+}
+
+.center {
+  margin-left: auto;
+  margin-right: auto;
+}

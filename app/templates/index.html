@@ -2,7 +2,38 @@
 
 {% block app_content %}
     <html>
-        <h1>Welcome to SVS FEM DigitalTwin Web</h1>
-        Work in progress...
+        <head>
+          <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet" />
+          {{ turbo() }}
+        </head>
+        <body>
+        <div>
+          <table>
+            <tr>
+              <td>Ball valve pressure drop [Pa]</td>
+              <td>{{ data['Ball_Valve_Pressure_drop'] }}</td>
+            </tr>
+            <tr>
+              <td>Bend pressure drop [Pa]</td>
+              <td>{{ data['Bend_Pressure_drop'] }}</td>
+            </tr>  
+            <tr>
+              <td>Control valve pressure differnce [Pa]</td>
+              <td>{{ data['Control_Valve_Static_pressure_diff'] }}</td>
+            </tr> 
+            <tr>
+              <td>Pump pressure rise [Pa]</td>
+              <td>{{ data['Pump_pressure_rise'] }}</td>
+            </tr>
+            <tr>
+              <td>Manometer [Pa]</td>
+              <td>{{ data['ManometrMonitor'] }}</td>
+            </tr>
+          </table>
+        </div>
+      <div>
+        <img allign="middle" src="{{url_for('static', filename='HydraulicDT-Scheme.png')}}"/>
+      </div>
+    </body>
     </html>
 {% endblock %}

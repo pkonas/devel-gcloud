@@ -26,6 +26,7 @@ def get_last_data():
     return jsonify(Data.query.order_by(Data.datetime.desc()).first().to_dict())   
 
 @bp.route('/data/valve', methods=['GET'])
+@token_auth.login_required
 def get_valve_data():
     return jsonify(valve_opening.current_value)  
 
@@ -35,9 +36,8 @@ def get_valve_data():
 def get_last_chartdata():
     dictionary1 = Data.query.order_by(Data.datetime.desc()).first().to_dict()
     dictionary2 = FmuData.query.order_by(FmuData.datetime.desc()).first().to_dict()
-    dictionary = dictionary1 | dictionary2
-    print(dictionary)
-    return jsonify({key:[value] for key,value in dictionary.items()}) 
+    dictionary = dictionary1 | dictionary2    
+    return dictionary
 
 @bp.route('/data/all', methods=['GET'])
 @token_auth.login_required
@@ -67,7 +67,7 @@ def add_fmudata():
     fmudata = FmuData()
     fmudata.from_dict(jsondata)
     db.session.add(fmudata)
-    db.session.commit()    
+    db.session.commit()
     response = jsonify(fmudata.to_dict())
     response.status_code = 201
     response.headers['Location'] = url_for('api.fmu', id=fmudata.id)

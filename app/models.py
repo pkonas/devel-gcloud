@@ -57,7 +57,7 @@ class Data(PaginatedAPIMixin, db.Model):
 
     def from_dict(self, data):
         data["datetime"] = datetime.fromisoformat(data["datetime"])
-        for field in ['datetime', 'pressure1', 'pressure2', 'flow1', 'flow2', 'temperature', 'valve_position' ]:
+        for field in ['datetime', 'pressure1', 'pressure2', 'flow1', 'flow2', 'temperature', 'valve_position']:
             if field in data:
                 setattr(self, field, data[field])
 
@@ -77,7 +77,7 @@ class FmuData(PaginatedAPIMixin, db.Model):
     FlowMonitor2 = db.Column(db.Float)
     PressureMonitor1 = db.Column(db.Float)
     PressureMonitor2 = db.Column(db.Float)
-    
+
     def from_dict(self, data):
         data["datetime"] = datetime.fromisoformat(data["datetime"])
         for field in ['datetime', 'Ball_Valve_Pressure_drop', 'Bend_Pressure_drop',
@@ -85,7 +85,7 @@ class FmuData(PaginatedAPIMixin, db.Model):
                       'ManometrMonitor','PressureMonitor1','PressureMonitor2','Pump_pressure_rise']:
             if field in data:
                 setattr(self, field, data[field])
-                
+
     def to_dict(self):
         data = {
             "id" : self.id,
@@ -114,16 +114,16 @@ class User(UserMixin, db.Model):
 
     token = db.Column(db.String(32), index=True, unique=True)
     token_expiration = db.Column(db.DateTime)
-    
+
     def __repr__(self):
         return '<User {}>'.format(self.username)
-    
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-        
+
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    
+
     def set_role(self, rolename):
         role = Role.query.filter(Role.name==rolename).first()
         db.session.execute(role_user_table.insert(),params={"user_id": self.id, "role_id": role.id},) 
@@ -159,12 +159,7 @@ class User(UserMixin, db.Model):
 def load_user(id):
     return User.query.get(int(id))
 
-
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True)
     description = db.Column(db.String(255))
-
-
-
-

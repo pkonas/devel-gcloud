@@ -1,4 +1,6 @@
 from datetime import datetime
+import time
+import threading
 
 from flask import current_app
 from flask import render_template, flash, redirect, url_for
@@ -7,6 +9,7 @@ from flask_login import current_user
 from flask_login import login_required
 
 from app import db
+from app import turbo
 from app.models import Data, User, FmuData
 from app.main.forms import EditProfileForm, ValveForm
 from app.main import bp, valve_opening
@@ -17,11 +20,23 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
+    
+# @bp.before_request
+# def before_first_request():
+#     threading.Thread(target=update_load).start()
+
+# def update_load():
+#     with current_app.app_context:
+#         while True:
+#             time.sleep(5)
+#             turbo.push(turbo.replace(render_template('index.html'), 'data'))
 
 @bp.route('/')
-@bp.route('/index')
+@bp.route('/index', methods=["GET", "POST"])
 def index():
-    return render_template('index.html', title='Home')
+    data = FmuData.query.order_by(FmuData.datetime.desc()).first().to_dict()
+    print(data)
+    return render_template('index.html',data=data,title='Home')
 
 @bp.route('/charts', methods=["GET", "POST"])
 def charts():
