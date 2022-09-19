@@ -35,10 +35,10 @@ def get_valve_data():
 @crossdomain
 #@token_auth.login_required
 def get_last_chartdata():
-    dictionary1 = Data.query.order_by(Data.datetime.desc()).first().to_dict()
-    dictionary2 = FmuData.query.order_by(FmuData.datetime.desc()).first().to_dict()
-    dictionary = dictionary1 | dictionary2    
-    return dictionary
+    data1 = Data.query.order_by(Data.datetime.desc()).first().to_dict()
+    data2 = FmuData.query.order_by(FmuData.datetime.desc()).first().to_dict()
+    data1.update(data2) 
+    return data1
 
 @bp.route('/data/all', methods=['GET'])
 @token_auth.login_required

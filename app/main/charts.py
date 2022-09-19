@@ -6,19 +6,21 @@ from bokeh.plotting import show, figure
 from bokeh.models import ColumnDataSource, AjaxDataSource, DatetimeTickFormatter, NumeralTickFormatter, CustomJS, DatetimeRangeSlider, HoverTool
 from bokeh.io import curdoc
 from bokeh.embed import components
-from bokeh.transform import factor_cmap    
-from bokeh.palettes import Spectral5
+
 
 def livecharts():
     # setup AjaxDataSource with URL and polling interval
     #'https://twin.svsfem.cz/api/data/lastchart'
     #'http://127.0.0.1:5000/api/data/lastchart'
-    source = AjaxDataSource(data_url='https://twin.svsfem.cz/api/data/lastchart',
-                            polling_interval=5000, method= "GET", mode='append')
-
+    
+    source = AjaxDataSource(data_url='http://127.0.0.1:5000/api/data/lastchart',
+                            polling_interval=5000, method= "GET", mode='append') #
+    print(source.data)
+    # adapter, content_type, data, data_url, http_headers,
+    # if_modified, js_event_callbacks, js_property_callbacks, max_size, method, mode, name, polling_interval, selected, selection_policy, subscribed_events, syncable or tags
     tooltips = [
         ("time", "@datetime{%F %T}"),
-        ("value", "$y{0.0}"),
+        ("value", "$y{0.0}")
     ]
 
     TOOLS = "pan,box_zoom,wheel_zoom,lasso_select,save,reset"
@@ -27,7 +29,7 @@ def livecharts():
     curdoc().theme = 'caliber'
     height = 325
     width = 1100
-
+    
     p1 = figure(height=height, width=width, title="Pressure", sizing_mode="stretch_width",x_axis_type="datetime",
     y_axis_label="Pressure [Pa]", x_axis_label="Time", tools=TOOLS)
 
@@ -36,13 +38,13 @@ def livecharts():
     p1.line("datetime", "pressure2", source=source, line_width=2, color="firebrick", legend="Pressure2")
     p1.square("datetime", "pressure2", source=source, size=10, color="firebrick", fill_color="white")
 
-    p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy",line_dash="dashed", legend="DT Pressure1")
+    p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy",line_dash="dashed",legend="DT Pressure1")
     p1.circle_x("datetime", "PressureMonitor1", source=source, size=10, color="navy", fill_color="white")
-    p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick",line_dash="dashed", legend="DT Pressure2")
+    p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick",line_dash="dashed",legend="DT Pressure2")
     p1.square_x("datetime", "PressureMonitor2", source=source, size=10, color="firebrick", fill_color="white")
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
-    y_axis_label="Flow rate [l/h]",  x_axis_label="Time", x_range=p1.x_range, tools=TOOLS)
+    y_axis_label="Flow rate [l/h]",x_axis_label="Time",x_range=p1.x_range, tools=TOOLS)
 
     p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", legend="Flow1")
     p2.circle("datetime", "FlowMonitor1", source=source, size=10, color="navy", fill_color="white")
