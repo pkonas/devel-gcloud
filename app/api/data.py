@@ -28,7 +28,7 @@ def get_last_data():
 @token_auth.login_required
 def get_valve_data():
     valve = ValveOpening.query.order_by(ValveOpening.id.desc()).first().to_dict()   
-    print(valve) 
+    valve["valve"] = valve.pop("datetime")
     return valve 
 
 @bp.route('/data/lastchart', methods=['GET'])
