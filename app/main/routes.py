@@ -20,7 +20,7 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
-    
+
 # @bp.before_request
 # def before_first_request():
 #     threading.Thread(target=update_load).start()

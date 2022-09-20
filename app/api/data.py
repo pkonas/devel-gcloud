@@ -5,6 +5,7 @@ from flask import url_for
 from app import db
 from app.api.errors import bad_request
 from app.api.auth import token_auth
+from datetime import datetime, timezone, timedelta
 
 def crossdomain(f):
     def wrapped_function(*args, **kwargs):
@@ -20,12 +21,12 @@ def crossdomain(f):
     return wrapped_function
 
 @bp.route('/data/last', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_last_data():
     return jsonify(Data.query.order_by(Data.datetime.desc()).first().to_dict())   
 
 @bp.route('/data/valve', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_valve_data():
     valve = ValveOpening.query.order_by(ValveOpening.id.desc()).first().to_dict()   
     valve["valve"] = valve.pop("datetime")
@@ -37,7 +38,8 @@ def get_valve_data():
 def get_last_chartdata():
     data1 = Data.query.order_by(Data.datetime.desc()).first().to_dict()
     data2 = FmuData.query.order_by(FmuData.datetime.desc()).first().to_dict()
-    data1.update(data2) 
+    data1.update(data2)
+    data1["datetime"] = data1["datetime"].isoformat(timespec="seconds")
     return data1
 
 @bp.route('/data/all', methods=['GET'])

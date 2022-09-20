@@ -7,6 +7,8 @@ from flask_admin.contrib.sqla import ModelView
 class DTwinModelView(ModelView):
     create_modal = True
     edit_modal = True
+    page_size = 500
+    can_export = True
 
     def is_accessible(self):
         return current_user.is_admin()

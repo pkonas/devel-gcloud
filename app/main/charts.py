@@ -13,8 +13,18 @@ def livecharts():
     #'https://twin.svsfem.cz/api/data/lastchart'
     #'http://127.0.0.1:5000/api/data/lastchart'
     
-    source = AjaxDataSource(data_url='https://twin.svsfem.cz/api/data/lastchart',
-                            polling_interval=5000, method= "GET", mode='append') #
+    adapter = CustomJS(code="""
+    const hydrodata = cb_data.response
+    const result = {datetime: [Date.parse(hydrodata["datetime"])], pressure1: [hydrodata["pressure1"]], pressure2: [hydrodata["pressure2"]],
+                    flow1: [hydrodata["flow1"]],flow2: [hydrodata["flow2"]], valve_position: [hydrodata["valve_position"]], 
+                    temperature: [hydrodata["temperature"]],PressureMonitor1: [hydrodata["PressureMonitor1"]],
+                    PressureMonitor2: [hydrodata["PressureMonitor2"]],FlowMonitor1: [hydrodata["FlowMonitor1"]], FlowMonitor2: [hydrodata["FlowMonitor2"]]} 
+    console.log(result)
+    return result
+""")
+    
+    source = AjaxDataSource(data_url='http://127.0.0.1:5000/api/data/lastchart',
+                            polling_interval=8000, method= "GET", mode='append',adapter=adapter)
     print(source.data)
     # adapter, content_type, data, data_url, http_headers,
     # if_modified, js_event_callbacks, js_property_callbacks, max_size, method, mode, name, polling_interval, selected, selection_policy, subscribed_events, syncable or tags
@@ -89,14 +99,14 @@ def livecharts():
     p4.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
 
     p1.yaxis.formatter = NumeralTickFormatter(format="0 a")
-    # p3.xaxis.formatter=DatetimeTickFormatter(
-    #     microseconds=["%H:%M:%S"],
-    #     milliseconds=["%H:%M:%S"],
-    #     hours=["%H:%M:%S"],
-    #     days=["%H:%M:%S"],
-    #     months=["%H:%M:%S"],
-    #     years=["%H:%M:%S"],
-    # )
+    p3.xaxis.formatter=DatetimeTickFormatter(
+        microseconds=["%H:%M:%S"],
+        milliseconds=["%H:%M:%S"],
+        hours=["%H:%M:%S"],
+        days=["%H:%M:%S"],
+        months=["%H:%M:%S"],
+        years=["%H:%M:%S"],
+    )
 
     script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'))
     return script, div
@@ -113,6 +123,7 @@ def history_chart():
     df1 = pd.DataFrame(sql_query1)
     df2 = pd.DataFrame(sql_query2)
     df = pd.concat([df1, df2], axis=1)
+    print(df)
     source = ColumnDataSource(df)
 
     tooltips = [
