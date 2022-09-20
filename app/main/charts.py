@@ -79,13 +79,13 @@ def livecharts():
     p4.circle("datetime", "temperature", source=source, size=10, color="orange", fill_color="white")
 
     p1.x_range.follow = "end"
-    p1.x_range.follow_interval = 5000
+    #p1.x_range.follow_interval = 5000
     p2.x_range.follow = "end"
-    p2.x_range.follow_interval = 5000
+    #p2.x_range.follow_interval = 5000
     p3.x_range.follow = "end"
-    p3.x_range.follow_interval = 5000
+    #p3.x_range.follow_interval = 5000
     p4.x_range.follow = "end"
-    p4.x_range.follow_interval = 5000
+    #p4.x_range.follow_interval = 5000
     p1.legend.location = "top_left"
     p1.legend.click_policy="hide"
     p2.legend.location = "top_left"
@@ -99,15 +99,18 @@ def livecharts():
     p4.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
 
     p1.yaxis.formatter = NumeralTickFormatter(format="0 a")
-    # p3.xaxis.formatter=DatetimeTickFormatter(
-    #     microseconds=["%H:%M:%S"],
-    #     milliseconds=["%H:%M:%S"],
-    #     hours=["%H:%M:%S"],
-    #     days=["%H:%M:%S"],
-    #     months=["%H:%M:%S"],
-    #     years=["%H:%M:%S"],
-    # )
-
+    p3.xaxis.formatter=DatetimeTickFormatter(
+        microseconds=["%H:%M:%S"],
+        milliseconds=["%H:%M:%S"],
+        hours=["%H:%M:%S"],
+        days=["%H:%M:%S"],
+        months=["%H:%M:%S"],
+        years=["%H:%M:%S"],
+    )
+    p1.axis.formatter = p3.xaxis.formatter
+    p2.axis.formatter = p3.xaxis.formatter
+    p4.axis.formatter = p3.xaxis.formatter
+    
     script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'))
     return script, div
 

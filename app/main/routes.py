@@ -1,9 +1,8 @@
 from datetime import datetime
-import time
-import threading
+import os
 
 from flask import current_app
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, send_from_directory
 from flask import request
 from flask_login import current_user
 from flask_login import login_required
@@ -93,4 +92,9 @@ def edit_profile():
         form.username.data = current_user.username
     return render_template('edit_profile.html', title='Edit Profile',
                            form=form)
+    
+@bp.route('/favicon.ico')
+def favicon():    
+    return send_from_directory(os.path.join(bp.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
     
