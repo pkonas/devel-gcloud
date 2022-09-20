@@ -23,7 +23,7 @@ def livecharts():
     return result
 """)
     
-    source = AjaxDataSource(data_url='http://127.0.0.1:5000/api/data/lastchart',
+    source = AjaxDataSource(data_url='https://twin.svsfem.cz/api/data/lastchart',
                             polling_interval=8000, method= "GET", mode='append',adapter=adapter)
     print(source.data)
     # adapter, content_type, data, data_url, http_headers,

@@ -26,7 +26,7 @@ def get_last_data():
     return jsonify(Data.query.order_by(Data.datetime.desc()).first().to_dict())   
 
 @bp.route('/data/valve', methods=['GET'])
-#@token_auth.login_required
+@token_auth.login_required
 def get_valve_data():
     valve = ValveOpening.query.order_by(ValveOpening.id.desc()).first().to_dict()   
     valve["valve"] = valve.pop("datetime")
