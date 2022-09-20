@@ -107,9 +107,9 @@ def livecharts():
         months=["%H:%M:%S"],
         years=["%H:%M:%S"],
     )
-    p1.axis.formatter = p3.xaxis.formatter
-    p2.axis.formatter = p3.xaxis.formatter
-    p4.axis.formatter = p3.xaxis.formatter
+    p1.xaxis.formatter = p3.xaxis.formatter
+    p2.xaxis.formatter = p3.xaxis.formatter
+    p4.xaxis.formatter = p3.xaxis.formatter
     
     script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'))
     return script, div
@@ -150,7 +150,7 @@ def history_chart():
     p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Pressure2")    
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
-    y_axis_label="Flow rate [m3/h]",  x_axis_label="Time", x_range=p1.x_range,  tools=TOOLS)
+    y_axis_label="Flow rate [l/h]",  x_axis_label="Time", x_range=p1.x_range,  tools=TOOLS)
 
     p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow1")
     p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", legend="Flow2")
