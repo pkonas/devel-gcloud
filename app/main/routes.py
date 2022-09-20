@@ -69,7 +69,7 @@ def set_valve():
         valve = ValveOpening(valve_value=form.valve_opening.data)
         db.session.add(valve)
         db.session.commit()
-        flash('Control valve opening has been set!')
+        flash(f'Control valve opening has been changed to {form.valve_opening.data}!')
         #return redirect(url_for('main.charts'))
     return render_template('set_valve.html', form=form,title='Control valve')       
 

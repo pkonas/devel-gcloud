@@ -23,7 +23,7 @@ def livecharts():
     return result
 """)
     
-    source = AjaxDataSource(data_url='https://twin.svsfem.cz/api/data/lastchart',
+    source = AjaxDataSource(data_url='http://127.0.0.1:5000/api/data/lastchart',
                             polling_interval=5000, method= "GET", mode='append',adapter=adapter)
     print(source.data)
     # adapter, content_type, data, data_url, http_headers,
@@ -56,15 +56,15 @@ def livecharts():
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
     y_axis_label="Flow rate [l/h]",x_axis_label="Time",x_range=p1.x_range, tools=TOOLS)
 
-    p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", legend="Flow1")
-    p2.circle("datetime", "FlowMonitor1", source=source, size=10, color="navy", fill_color="white")
-    p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", legend="Flow2")
-    p2.triangle("datetime", "FlowMonitor2", source=source, size=10, color="firebrick", fill_color="white")   
+    p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow1")
+    p2.circle("datetime", "flow1", source=source, size=10, color="navy", fill_color="white")
+    p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", legend="Flow2")
+    p2.triangle("datetime", "flow2", source=source, size=10, color="firebrick", fill_color="white")   
 
-    p2.line("datetime", "flow1", source=source, line_width=2, color="navy", line_dash="dashed", legend="DT Flow1")
-    p2.circle_x("datetime", "flow1", source=source, size=10, color="navy", fill_color="white")
-    p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Flow2")
-    p2.square_x("datetime", "flow2", source=source, size=10, color="firebrick", fill_color="white")  
+    p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", line_dash="dashed", legend="DT Flow1")
+    p2.circle_x("datetime", "FlowMonitor1", source=source, size=10, color="navy", fill_color="white")
+    p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Flow2")
+    p2.square_x("datetime", "FlowMonitor2", source=source, size=10, color="firebrick", fill_color="white")  
 
     p3 = figure(height=height, width=width, title="Valve position", x_axis_type="datetime", y_range=(0, 100),
     sizing_mode="stretch_width", y_axis_label="Position [-]", x_axis_label="Time", x_range=p1.x_range,
@@ -97,6 +97,11 @@ def livecharts():
     p2.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
     p3.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
     p4.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
+    
+    p1.toolbar.active_drag = None
+    p2.toolbar.active_drag = None
+    p3.toolbar.active_drag = None
+    p4.toolbar.active_drag = None
 
     p1.yaxis.formatter = NumeralTickFormatter(format="0 a")
     p3.xaxis.formatter=DatetimeTickFormatter(
@@ -190,5 +195,11 @@ def history_chart():
     p2.xaxis.formatter = DatetimeTickFormatter(months = "%b %Y")
     p3.xaxis.formatter = DatetimeTickFormatter(months = "%b %Y")
     p4.xaxis.formatter = DatetimeTickFormatter(months = "%b %Y")
+    
+    p1.toolbar.active_drag = None
+    p2.toolbar.active_drag = None
+    p3.toolbar.active_drag = None
+    p4.toolbar.active_drag = None
+    
     script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'),column(datetime_range_slider))
     return script, div
