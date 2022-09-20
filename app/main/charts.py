@@ -79,13 +79,13 @@ def livecharts():
     p4.circle("datetime", "temperature", source=source, size=10, color="orange", fill_color="white")
 
     p1.x_range.follow = "end"
-    #p1.x_range.follow_interval = 5000
+    p1.x_range.follow_interval = 100000
     p2.x_range.follow = "end"
-    #p2.x_range.follow_interval = 5000
+    p2.x_range.follow_interval = 100000
     p3.x_range.follow = "end"
-    #p3.x_range.follow_interval = 5000
+    p3.x_range.follow_interval = 100000
     p4.x_range.follow = "end"
-    #p4.x_range.follow_interval = 5000
+    p4.x_range.follow_interval = 100000
     p1.legend.location = "top_left"
     p1.legend.click_policy="hide"
     p2.legend.location = "top_left"
