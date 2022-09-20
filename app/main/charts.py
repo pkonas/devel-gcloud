@@ -24,7 +24,7 @@ def livecharts():
 """)
     
     source = AjaxDataSource(data_url='https://twin.svsfem.cz/api/data/lastchart',
-                            polling_interval=8000, method= "GET", mode='append',adapter=adapter)
+                            polling_interval=5000, method= "GET", mode='append',adapter=adapter)
     print(source.data)
     # adapter, content_type, data, data_url, http_headers,
     # if_modified, js_event_callbacks, js_property_callbacks, max_size, method, mode, name, polling_interval, selected, selection_policy, subscribed_events, syncable or tags
@@ -79,13 +79,13 @@ def livecharts():
     p4.circle("datetime", "temperature", source=source, size=10, color="orange", fill_color="white")
 
     p1.x_range.follow = "end"
-    p1.x_range.follow_interval = 100
+    p1.x_range.follow_interval = 5000
     p2.x_range.follow = "end"
-    p2.x_range.follow_interval = 100
+    p2.x_range.follow_interval = 5000
     p3.x_range.follow = "end"
-    p3.x_range.follow_interval = 100
+    p3.x_range.follow_interval = 5000
     p4.x_range.follow = "end"
-    p4.x_range.follow_interval = 100
+    p4.x_range.follow_interval = 5000
     p1.legend.location = "top_left"
     p1.legend.click_policy="hide"
     p2.legend.location = "top_left"
@@ -99,14 +99,14 @@ def livecharts():
     p4.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
 
     p1.yaxis.formatter = NumeralTickFormatter(format="0 a")
-    p3.xaxis.formatter=DatetimeTickFormatter(
-        microseconds=["%H:%M:%S"],
-        milliseconds=["%H:%M:%S"],
-        hours=["%H:%M:%S"],
-        days=["%H:%M:%S"],
-        months=["%H:%M:%S"],
-        years=["%H:%M:%S"],
-    )
+    # p3.xaxis.formatter=DatetimeTickFormatter(
+    #     microseconds=["%H:%M:%S"],
+    #     milliseconds=["%H:%M:%S"],
+    #     hours=["%H:%M:%S"],
+    #     days=["%H:%M:%S"],
+    #     months=["%H:%M:%S"],
+    #     years=["%H:%M:%S"],
+    # )
 
     script, div = components(column(p3,p1,p2,p4,sizing_mode='stretch_both'))
     return script, div
