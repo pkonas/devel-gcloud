@@ -73,5 +73,5 @@ def add_fmudata():
     db.session.commit()
     response = jsonify(fmudata.to_dict())
     response.status_code = 201
-    response.headers['Location'] = url_for('api.fmu', id=fmudata.id)
+    #response.headers['Location'] = url_for('api.fmu', id=fmudata.id)
     return response

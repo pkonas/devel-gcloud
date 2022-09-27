@@ -8,7 +8,6 @@ from flask_login import current_user
 from flask_login import login_required
 
 from app import db
-from app import turbo
 from app.models import Data, User, FmuData, ValveOpening
 from app.main.forms import EditProfileForm, ValveForm
 from app.main import bp
@@ -19,23 +18,20 @@ def before_request():
     if current_user.is_authenticated:
         current_user.last_seen = datetime.utcnow()
         db.session.commit()
-
-# @bp.before_request
-# def before_first_request():
-#     threading.Thread(target=update_load).start()
-
-# def update_load():
-#     with current_app.app_context:
-#         while True:
-#             time.sleep(5)
-#             turbo.push(turbo.replace(render_template('index.html'), 'data'))
+            
+@bp.context_processor
+def load_simulated():
+    data = FmuData.query.order_by(FmuData.datetime.desc()).first().to_dict()
+    return {'data1':data['Ball_Valve_Pressure_drop'],'data2':data['Bend_Pressure_drop'],
+            'data3':data['Control_Valve_Static_pressure_diff'],'data4':data['Pump_pressure_rise'],
+            'data5':data['ManometrMonitor']}
 
 @bp.route('/')
 @bp.route('/index', methods=["GET", "POST"])
 def index():
-    data = FmuData.query.order_by(FmuData.datetime.desc()).first().to_dict()
+    sdata = load_simulated()
     print(data)
-    return render_template('index.html',data=data,title='Home')
+    return render_template('index.html',data=sdata,title='Home')
 
 @bp.route('/charts', methods=["GET", "POST"])
 def charts():
