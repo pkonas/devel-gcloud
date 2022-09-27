@@ -1,38 +1,42 @@
 table {
     table-layout: fixed;
-    width: 50%;
+    width: 100%;
     border-collapse: collapse;
     border: 6px solid #fed100;
     margin-left: auto;
     margin-right: auto;
   }
 
-  thead th:nth-child(1) {
-    width: 30%;
-  }
-  
-  thead th:nth-child(2) {
-    width: 20%;
-  }
-  
-  thead th:nth-child(3) {
+  .first-column {
     width: 15%;
   }
   
-  thead th:nth-child(4) {
+  .second-column {
     width: 35%;
   }
   
-  th,
-  td {
-    padding: 20px;
+  .third-column {
+    width: 25%;
+  }
+  
+  .last-column {
+    width: 25%;
+  }
+  
+  th,td{
+    border: 1px solid #fed100;
+    text-align: center  
+  } 
+
+  th,td {
+    padding: 5px;
   }
 
-  /* typography */
+/* typography */
 
-tbody td {
+/* tbody td {
   text-align: center;
-}
+} */
 
 /* zebra striping */
 
@@ -49,13 +53,8 @@ table {
 }
 
 .center {
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.center {
   display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 50%;
+  width: 80%;
 }

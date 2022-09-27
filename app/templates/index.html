@@ -10,27 +10,44 @@
         <div>
           <table>
             <tr>
-              <td>Ball valve pressure drop [Pa]</td>
-              <td>{{ data1 }}</td>
+              <th class="first-column">Symb.</th>
+              <th class="second-column">Physical quantity</th>
+              <th class="third-column">Virtual sensor [Pa]</th>
+              <th class="last-column">Physical sensor [Pa]</th>
             </tr>
             <tr>
-              <td>Bend pressure drop [Pa]</td>
+              <td>Px</td>
+              <td>Ball valve Δp</td>
+              <td>{{ data1 }}</td>
+              <td>-</td>
+            </tr>
+            <tr>
+              <td>Px</td>
+              <td>Bend Δp</td>
               <td>{{ data2 }}</td>
+              <td>-</td>
             </tr>  
             <tr>
-              <td>Control valve pressure differnce [Pa]</td>
+              <td>Px</td>
+              <td>Control valve Δp</td>
               <td>{{ data3 }}</td>
+              <td>-</td>
             </tr> 
             <tr>
-              <td>Pump pressure rise [Pa]</td>
+              <td>Px</td>
+              <td>Pump pressure rise</td>
               <td>{{ data4 }}</td>
+              <td>-</td>
             </tr>
             <tr>
-              <td>Manometer [Pa]</td>
+              <td>Px</td>
+              <td>Manometer</td>
               <td>{{ data5 }}</td>
+              <td>-</td>
             </tr>
           </table>
         </div>
+      <p></p>
       <div>
         <img allign="middle" src="{{url_for('static', filename='HydraulicDT-Scheme.png')}}" class="center"/>
       </div>
