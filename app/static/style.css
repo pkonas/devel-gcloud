@@ -8,11 +8,15 @@ table {
   }
 
   .first-column {
-    width: 15%;
+    width: 20%;
+  }
+
+  .middle-column {
+    width: 55%;
   }
   
   .second-column {
-    width: 35%;
+    width: 30%;
   }
   
   .third-column {

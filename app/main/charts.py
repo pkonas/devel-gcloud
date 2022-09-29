@@ -37,7 +37,7 @@ def livecharts():
 
     # use the AjaxDataSource just like a ColumnDataSource
     curdoc().theme = 'caliber'
-    height = 325
+    height = 450
     width = 1100
     
     p1 = figure(height=height, width=width, title="Pressure", sizing_mode="stretch_width",x_axis_type="datetime",
@@ -48,9 +48,9 @@ def livecharts():
     p1.line("datetime", "pressure2", source=source, line_width=2, color="firebrick", legend="Pressure2")
     p1.square("datetime", "pressure2", source=source, size=10, color="firebrick", fill_color="white")
 
-    p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy",line_dash="dashed",legend="DT Pressure1")
+    p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy",line_dash="dashed",legend="Virtual Pressure1")
     p1.circle_x("datetime", "PressureMonitor1", source=source, size=10, color="navy", fill_color="white")
-    p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick",line_dash="dashed",legend="DT Pressure2")
+    p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick",line_dash="dashed",legend="Virtual Pressure2")
     p1.square_x("datetime", "PressureMonitor2", source=source, size=10, color="firebrick", fill_color="white")
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
@@ -61,9 +61,9 @@ def livecharts():
     p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", legend="Flow2")
     p2.triangle("datetime", "flow2", source=source, size=10, color="firebrick", fill_color="white")   
 
-    p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", line_dash="dashed", legend="DT Flow1")
+    p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", line_dash="dashed", legend="Virtual Flow1")
     p2.circle_x("datetime", "FlowMonitor1", source=source, size=10, color="navy", fill_color="white")
-    p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Flow2")
+    p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="Virtual Flow2")
     p2.square_x("datetime", "FlowMonitor2", source=source, size=10, color="firebrick", fill_color="white")  
 
     p3 = figure(height=height, width=width, title="Valve position", x_axis_type="datetime", y_range=(0, 100),
@@ -143,7 +143,7 @@ def history_chart():
 
     # use the AjaxDataSource just like a ColumnDataSource
     curdoc().theme = 'caliber'
-    height = 600
+    height = 450
     width = 1100
 
     p1 = figure(height=height, width=width, title="Pressure", sizing_mode="stretch_width", x_axis_type="datetime",
