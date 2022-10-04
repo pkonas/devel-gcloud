@@ -4,47 +4,88 @@
     <html>
         <head>
           <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet" />
-          <meta http-equiv="refresh" content="10">
         </head>
         <body>
+          <div>
+
+            <b><font size="100"><CENTER>Digitální dvojče</CENTER></font></b>
+            <b><font size="90"><CENTER>regulovaného hydraulického okruhu</CENTER></font></b>
+            <p>...</p>
+          </div>
         <div>
           <table>
             <tr>
               <th class="first-column">Symbol</th>
-              <th class="middle-column">Physical quantity</th>
-              <th class="last-column">Virtual sensor [Pa]</th>
+              <th class="second-column">Physical quantity</th>
+              <th class="third-column">Sensor</th>
+              <th class="last-column">Virtual sensor</th>
             </tr>
             <tr>
-              <td>Px</td>
+              <td>Q<sub>1</sub></td>
+              <td>Flow rate through the primary circuit</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Q<sub>2</sub></td>
+              <td>Total flow rate</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>t<sub>1</sub></td>
+              <td>Temperature</td>
+              <td>✓</td>
+              <td>X</td>
+            </tr>
+            <tr>
+              <td>P<sub>1</sub></td>
+              <td>Pressure before control valve</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>P<sub>2</sub></td>
+              <td>Pressure after control valve</td>
+              <td>✓</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Δp<sub>v</sub></td>
               <td>Ball valve pressure difference</td>
-              <td>{{ data1 }}</td>
+              <td>X</td>
+              <td>✓</td>
             </tr>
             <tr>
-              <td>Px</td>
+              <td>Δp<sub>b</sub></td>
               <td>Bend pressure difference</td>
-              <td>{{ data2 }}</td>
+              <td>X</td>
+              <td>✓</td>
             </tr>  
             <tr>
-              <td>Px</td>
+              <td>Δp<sub>cv</sub></td>
               <td>Control valve pressure difference</td>
-              <td>{{ data3 }}</td>
+              <td>X</td>
+              <td>✓</td>
             </tr> 
             <tr>
-              <td>Px</td>
+              <td>Δp<sub>0</sub></td>
               <td>Pump pressure rise</td>
-              <td>{{ data4 }}</td>
+              <td>X</td>
+              <td>✓</td>
             </tr>
             <tr>
-              <td>Px</td>
+              <td>P<sub>0</sub></td>
               <td>Manometer</td>
-              <td>{{ data5 }}</td>
+              <td>✓</td>
+              <td>✓</td>
             </tr>
           </table>
         </div>
       <p></p>
-      <div>
-        <img allign="middle" src="{{url_for('static', filename='HydraulicDT-Scheme.png')}}" class="center"/>
-      </div>
+      <p font size="100"><b>Scheme of the hydraulic circuit:</b></p>
+      <p><img allign="middle" src="{{url_for('static', filename='scheme.png')}}" class="center"/></p>
+      <p><img allign="middle" src="{{url_for('static', filename='SVSFEM-LOGOTYP.png')}}" class="center"/></p>
     </body>
     </html>
 {% endblock %}

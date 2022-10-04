@@ -29,9 +29,14 @@ def load_simulated():
 @bp.route('/')
 @bp.route('/index', methods=["GET", "POST"])
 def index():
+    return render_template('index.html',title='Home')
+
+@bp.route('/')
+@bp.route('/virtual_sensors', methods=["GET", "POST"])
+def virtual_sensors():
     sdata = load_simulated()
     print(data)
-    return render_template('index.html',data=sdata,title='Home')
+    return render_template('virtual_sensors.html',data=sdata,title='Virtual sensors')
 
 @bp.route('/charts', methods=["GET", "POST"])
 def charts():

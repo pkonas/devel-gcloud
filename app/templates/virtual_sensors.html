@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+    <html>
+        <head>
+          <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet" />
+          <meta http-equiv="refresh" content="10">
+        </head>
+        <body>
+        <div>
+          <table>
+            <tr>
+              <th class="first-column">Symbol</th>
+              <th class="middle-column">Physical quantity</th>
+              <th class="last-column">Virtual sensor [Pa]</th>
+            </tr>
+            <p font size="100"><b>Current virtual sensor values:</b></p>
+            <tr>
+              <td>Δp<sub>v</sub></td>
+              <td>Ball valve pressure difference</td>
+              <td>{{ data1 }}</td>
+            </tr>
+            <tr>
+              <td>Δp<sub>b</sub></td>
+              <td>Bend pressure difference</td>
+              <td>{{ data2 }}</td>
+            </tr>  
+            <tr>
+              <td>Δp<sub>cv</sub></td>
+              <td>Control valve pressure difference</td>
+              <td>{{ data3 }}</td>
+            </tr> 
+            <tr>
+              <td>Δp<sub>0</sub></td>
+              <td>Pump pressure rise</td>
+              <td>{{ data4 }}</td>
+            </tr>
+            <tr>
+              <td>P<sub>0</sub></td>
+              <td>Manometer</td>
+              <td>{{ data5 }}</td>
+            </tr>
+          </table>
+        </div>
+      <p></p>
+      <div>
+        <p font size="100"><b>Scheme of the hydraulic circuit:</b></p>
+        <img allign="middle" src="{{url_for('static', filename='scheme.png')}}" class="center"/>
+        <p><img allign="middle" src="{{url_for('static', filename='SVSFEM-LOGOTYP.png')}}" class="center"/></p>
+      </div>
+    </body>
+    </html>
+{% endblock %}

@@ -54,7 +54,7 @@ def livecharts():
     p1.square_x("datetime", "PressureMonitor2", source=source, size=10, color="firebrick", fill_color="white")
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
-    y_axis_label="Flow rate [l/h]",x_axis_label="Time",x_range=p1.x_range, tools=TOOLS)
+    y_axis_label="Flow rate [l/min]",x_axis_label="Time",x_range=p1.x_range, tools=TOOLS)
 
     p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow1")
     p2.circle("datetime", "flow1", source=source, size=10, color="navy", fill_color="white")
@@ -67,7 +67,7 @@ def livecharts():
     p2.square_x("datetime", "FlowMonitor2", source=source, size=10, color="firebrick", fill_color="white")  
 
     p3 = figure(height=height, width=width, title="Valve position", x_axis_type="datetime", y_range=(0, 100),
-    sizing_mode="stretch_width", y_axis_label="Position [-]", x_axis_label="Time", x_range=p1.x_range,
+    sizing_mode="stretch_width", y_axis_label="Position [%]", x_axis_label="Time", x_range=p1.x_range,
     tools=TOOLS)
     p3.line("datetime", "valve_position", source=source, line_width=2, color="olive", legend="Valve position")
     p3.circle("datetime", "valve_position", source=source, size=10, color="olive", fill_color="white")
@@ -151,19 +151,19 @@ def history_chart():
 
     p1.line("datetime", "pressure1", source=source, line_width=2, color="navy", legend="Pressure1")
     p1.line("datetime", "pressure2", source=source, line_width=2, color="firebrick", legend="Pressure2")
-    p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy", line_dash="dashed",legend="DT Pressure1")
-    p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Pressure2")    
+    p1.line("datetime", "PressureMonitor1", source=source, line_width=2, color="navy", line_dash="dashed",legend="Virtual Pressure1")
+    p1.line("datetime", "PressureMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="Virtual Pressure2")    
 
     p2 = figure(height=height, width=width, title="Flow", x_axis_type="datetime", sizing_mode="stretch_width",
-    y_axis_label="Flow rate [l/h]",  x_axis_label="Time", x_range=p1.x_range,  tools=TOOLS)
+    y_axis_label="Flow rate [l/min]",  x_axis_label="Time", x_range=p1.x_range,  tools=TOOLS)
 
     p2.line("datetime", "flow1", source=source, line_width=2, color="navy", legend="Flow1")
     p2.line("datetime", "flow2", source=source, line_width=2, color="firebrick", legend="Flow2")
-    p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", line_dash="dashed", legend="DT Flow1")
-    p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="DT Flow2")   
+    p2.line("datetime", "FlowMonitor1", source=source, line_width=2, color="navy", line_dash="dashed", legend="Virtual Flow1")
+    p2.line("datetime", "FlowMonitor2", source=source, line_width=2, color="firebrick", line_dash="dashed", legend="Virtual Flow2")   
 
     p3 = figure(height=height, width=width, title="Valve position", x_axis_type="datetime", y_range=(0, 100),
-    sizing_mode="stretch_width", y_axis_label="Position [-]", x_axis_label="Time", x_range=p1.x_range,
+    sizing_mode="stretch_width", y_axis_label="Position [%]", x_axis_label="Time", x_range=p1.x_range,
     tools=TOOLS)
     p3.line("datetime", "valve_position", source=source, line_width=2, color="olive", legend="Valve position")
 
@@ -172,7 +172,7 @@ def history_chart():
     tools=TOOLS)
     p4.line("datetime", "temperature", source=source, line_width=2, color="orange", legend="Temperature")
 
-    p1.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime' }))
+    p1.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
     p2.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))    
     p3.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))    
     p4.add_tools(HoverTool(tooltips=tooltips, formatters={'@datetime': 'datetime'}))
