@@ -29,7 +29,7 @@ class PaginatedAPIMixin(object):
         }
         return data
 
-class ValveOpening(PaginatedAPIMixin, db.Model):
+class ValveOpening(PaginatedAPIMixin, db.Model): #InputData
     id = db.Column(db.Integer, primary_key=True)
     valve_value = db.Column(db.Integer)
     
@@ -39,7 +39,7 @@ class ValveOpening(PaginatedAPIMixin, db.Model):
         }
         return data
 
-class Data(PaginatedAPIMixin, db.Model):
+class Data(PaginatedAPIMixin, db.Model): #SensorData
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     pressure1 = db.Column(db.Float)
@@ -72,7 +72,7 @@ role_user_table = db.Table('role_user',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
 
-class FmuData(PaginatedAPIMixin, db.Model):
+class FmuData(PaginatedAPIMixin, db.Model): #VirtualData
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     Ball_Valve_Pressure_drop = db.Column(db.Float)
