@@ -95,13 +95,9 @@
             </div>
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                 <ul class="nav navbar-nav">
-                    <li><a href="{{ url_for('main.index') }}">Home</a></li>
-                    <li><a href="{{ url_for('main.virtual_sensors') }}">Virtual sensors</a></li>                   
-                    <li><a href="{{ url_for('main.charts') }}">Live data</a></li>
-                    <li><a href="{{ url_for('main.history') }}">History</a></li>
-                    <!-- <li><a href="{{ url_for('main.data') }}">Data</a></li>
-                    <li><a href="{{ url_for('main.simulationdata') }}">Sim Data</a></li> -->
-                    <li><a href="{{ url_for('main.set_valve') }}">Set valve</a></li>
+                    <li><a href="{{ url_for('main.index') }}">Home</a></li>            
+                    <li><a href="{{ url_for('main.data') }}">Data</a></li>
+                    <li><a href="{{ url_for('main.simulationdata') }}">Sim Data</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}

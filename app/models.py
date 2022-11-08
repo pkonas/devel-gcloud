@@ -29,17 +29,20 @@ class PaginatedAPIMixin(object):
         }
         return data
 
-class ValveOpening(PaginatedAPIMixin, db.Model): #InputData
+class InputData(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     valve_value = db.Column(db.Integer)
     
     def to_dict(self):
-        data = {
-            "datetime" : self.valve_value
-        }
+        data = {k:v for k, v in InputData.__dict__.items() if not k.startswith('__')}
         return data
 
-class Data(PaginatedAPIMixin, db.Model): #SensorData
+    def from_dict(self, data):
+        attributes = [key for key in InputData.__dict__.keys() if not key.startswith('__')]
+        for field in attributes:
+            if field in data:
+                setattr(self, field, data[field])
+class Data(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     pressure1 = db.Column(db.Float)
@@ -50,21 +53,13 @@ class Data(PaginatedAPIMixin, db.Model): #SensorData
     valve_position = db.Column(db.Float)
 
     def to_dict(self):
-        data = {
-            "id" : self.id,
-            "datetime" : self.datetime,
-            "pressure1" : self.pressure1,
-            "pressure2" : self.pressure2,
-            "flow1" : self.flow1,
-            "flow2" : self.flow2,
-            "temperature" : self.temperature,
-            "valve_position" : self.valve_position
-        }
+        data = {k:v for k, v in Data.__dict__.items() if not k.startswith('__')}
         return data
 
     def from_dict(self, data):
+        attributes = [key for key in Data.__dict__.keys() if not key.startswith('__')]
         data["datetime"] = datetime.fromisoformat(data["datetime"])
-        for field in ['datetime', 'pressure1', 'pressure2', 'flow1', 'flow2', 'temperature', 'valve_position']:
+        for field in attributes:
             if field in data:
                 setattr(self, field, data[field])
 
@@ -72,7 +67,7 @@ role_user_table = db.Table('role_user',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
 
-class FmuData(PaginatedAPIMixin, db.Model): #VirtualData
+class VirtualData(PaginatedAPIMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     Ball_Valve_Pressure_drop = db.Column(db.Float)
@@ -85,28 +80,16 @@ class FmuData(PaginatedAPIMixin, db.Model): #VirtualData
     PressureMonitor1 = db.Column(db.Float)
     PressureMonitor2 = db.Column(db.Float)
 
+    def to_dict(self):
+        data = {k:v for k, v in VirtualData.__dict__.items() if not k.startswith('__')}
+        return data
+
     def from_dict(self, data):
+        attributes = [key for key in VirtualData.__dict__.keys() if not key.startswith('__')]
         data["datetime"] = datetime.fromisoformat(data["datetime"])
-        for field in ['datetime', 'Ball_Valve_Pressure_drop', 'Bend_Pressure_drop',
-                      'Control_Valve_Static_pressure_diff', 'FlowMonitor1', 'FlowMonitor2',
-                      'ManometrMonitor','PressureMonitor1','PressureMonitor2','Pump_pressure_rise']:
+        for field in attributes:
             if field in data:
                 setattr(self, field, data[field])
-
-    def to_dict(self):
-        data = {
-            "id" : self.id,
-            "datetime" : self.datetime,
-            "Ball_Valve_Pressure_drop" : self.Ball_Valve_Pressure_drop,
-            "Bend_Pressure_drop" : self.Bend_Pressure_drop,
-            "Control_Valve_Static_pressure_diff" : self.Control_Valve_Static_pressure_diff,
-            "FlowMonitor1" : self.FlowMonitor1,
-            "FlowMonitor2" : self.FlowMonitor2,
-            "ManometrMonitor" : self.ManometrMonitor,
-            "PressureMonitor1" : self.PressureMonitor1,
-            "PressureMonitor2" : self.PressureMonitor2,
-            "Pump_pressure_rise" : self.Pump_pressure_rise
-        }
         return data
 
 class User(UserMixin, db.Model):

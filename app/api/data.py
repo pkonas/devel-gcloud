@@ -1,6 +1,6 @@
 from app.api import bp
 from flask import jsonify, request, make_response
-from app.models import Data, FmuData, ValveOpening
+from app.models import Data, VirtualData, InputData
 from flask import url_for
 from app import db
 from app.api.errors import bad_request
@@ -25,19 +25,17 @@ def crossdomain(f):
 def get_last_data():
     return jsonify(Data.query.order_by(Data.datetime.desc()).first().to_dict())   
 
-@bp.route('/data/valve', methods=['GET'])
+@bp.route('/data/input', methods=['GET'])
 @token_auth.login_required
-def get_valve_data():
-    valve = ValveOpening.query.order_by(ValveOpening.id.desc()).first().to_dict()   
-    valve["valve"] = valve.pop("datetime")
-    return valve 
+def get_input_data():
+    return jsonify(InputData.query.order_by(InputData.id.desc()).first().to_dict())
 
 @bp.route('/data/lastchart', methods=['GET'])
 @crossdomain
 #@token_auth.login_required
 def get_last_chartdata():
     data1 = Data.query.order_by(Data.datetime.desc()).first().to_dict()
-    data2 = FmuData.query.order_by(FmuData.datetime.desc()).first().to_dict()
+    data2 = VirtualData.query.order_by(VirtualData.datetime.desc()).first().to_dict()
     data1.update(data2)
     data1["datetime"] = data1["datetime"].isoformat(timespec="seconds")
     return data1
@@ -63,11 +61,11 @@ def add_data():
     response.headers['Location'] = url_for('api.data', id=data.id)
     return response
 
-@bp.route('/fmu', methods=['POST'])
+@bp.route('/data/virtualdata', methods=['POST'])
 @token_auth.login_required
-def add_fmudata():
+def add_virtualdata():
     jsondata = request.get_json()
-    fmudata = FmuData()
+    fmudata = VirtualData()
     fmudata.from_dict(jsondata)
     db.session.add(fmudata)
     db.session.commit()
