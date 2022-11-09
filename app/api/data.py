@@ -1,11 +1,10 @@
 from app.api import bp
 from flask import jsonify, request, make_response
-from app.models import Data, VirtualData, InputData
+from app.models import SensorData, VirtualData, InputData
 from flask import url_for
 from app import db
 from app.api.errors import bad_request
 from app.api.auth import token_auth
-from datetime import datetime, timezone, timedelta
 
 def crossdomain(f):
     def wrapped_function(*args, **kwargs):
@@ -20,39 +19,24 @@ def crossdomain(f):
         return resp
     return wrapped_function
 
-@bp.route('/data/last', methods=['GET'])
-#@token_auth.login_required
-def get_last_data():
-    return jsonify(Data.query.order_by(Data.datetime.desc()).first().to_dict())   
-
-@bp.route('/data/input', methods=['GET'])
+@bp.route('/data/sensor', methods=['GET'])
 @token_auth.login_required
-def get_input_data():
-    return jsonify(InputData.query.order_by(InputData.id.desc()).first().to_dict())
+def get_last_data():
+    return jsonify(SensorData.query.order_by(SensorData.datetime.desc()).first().to_dict())
 
-@bp.route('/data/lastchart', methods=['GET'])
-@crossdomain
-#@token_auth.login_required
-def get_last_chartdata():
-    data1 = Data.query.order_by(Data.datetime.desc()).first().to_dict()
-    data2 = VirtualData.query.order_by(VirtualData.datetime.desc()).first().to_dict()
-    data1.update(data2)
-    data1["datetime"] = data1["datetime"].isoformat(timespec="seconds")
-    return data1
-
-@bp.route('/data/all', methods=['GET'])
+@bp.route('/data/sensor/all', methods=['GET'])
 @token_auth.login_required
 def get_alldata():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
-    data = Data.to_collection_dict(Data.query, page, per_page, 'api.get_alldata')
+    data = SensorData.to_collection_dict(SensorData.query, page, per_page, 'api.get_alldata')
     return jsonify(data)
 
-@bp.route('/data', methods=['POST'])
+@bp.route('/data/sensor', methods=['POST'])
 @token_auth.login_required
 def add_data():
     jsondata = request.get_json()
-    data=Data()
+    data=SensorData()
     data.from_dict(jsondata)
     db.session.add(data)
     db.session.commit()    
@@ -61,15 +45,38 @@ def add_data():
     response.headers['Location'] = url_for('api.data', id=data.id)
     return response
 
+@bp.route('/data/virtualdata', methods=['GET'])
+@token_auth.login_required
+def get_virtualdata():
+    return jsonify(VirtualData.query.order_by(VirtualData.id.desc()).first().to_dict())
+
 @bp.route('/data/virtualdata', methods=['POST'])
 @token_auth.login_required
-def add_virtualdata():
+def post_virtualdata():
     jsondata = request.get_json()
-    fmudata = VirtualData()
-    fmudata.from_dict(jsondata)
-    db.session.add(fmudata)
+    virtualdata = VirtualData()
+    virtualdata.from_dict(jsondata)
+    db.session.add(virtualdata)
     db.session.commit()
-    response = jsonify(fmudata.to_dict())
+    response = jsonify(virtualdata.to_dict())
     response.status_code = 201
-    #response.headers['Location'] = url_for('api.fmu', id=fmudata.id)
+    response.headers['Location'] = url_for('api.data', id=virtualdata.id)
+    return response
+
+@bp.route('/data/inputdata', methods=['GET'])
+@token_auth.login_required
+def get_inputdata():
+    return jsonify(InputData.query.order_by(InputData.id.desc()).first().to_dict())
+
+@bp.route('/data/inputdata', methods=['POST'])
+@token_auth.login_required
+def post_inputdata():
+    jsondata = request.get_json()
+    inputdata = InputData()
+    inputdata.from_dict(jsondata)
+    db.session.add(inputdata)
+    db.session.commit()
+    response = jsonify(inputdata.to_dict())
+    response.status_code = 201
+    response.headers['Location'] = url_for('api.data', id=inputdata.id)
     return response

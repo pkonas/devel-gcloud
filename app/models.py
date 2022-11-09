@@ -6,30 +6,7 @@ from flask_login import UserMixin
 from datetime import datetime, timedelta
 from flask import url_for
 
-class PaginatedAPIMixin(object):
-    @staticmethod
-    def to_collection_dict(query, page, per_page, endpoint, **kwargs):
-        resources = query.paginate(page, per_page, False)
-        data = {
-            'items': [item.to_dict() for item in resources.items],
-            '_meta': {
-                'page': page,
-                'per_page': per_page,
-                'total_pages': resources.pages,
-                'total_items': resources.total
-            },
-            '_links': {
-                'self': url_for(endpoint, page=page, per_page=per_page,
-                                **kwargs),
-                'next': url_for(endpoint, page=page + 1, per_page=per_page,
-                                **kwargs) if resources.has_next else None,
-                'prev': url_for(endpoint, page=page - 1, per_page=per_page,
-                                **kwargs) if resources.has_prev else None
-            }
-        }
-        return data
-
-class InputData(PaginatedAPIMixin, db.Model):
+class InputData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     valve_value = db.Column(db.Integer)
     
@@ -42,7 +19,7 @@ class InputData(PaginatedAPIMixin, db.Model):
         for field in attributes:
             if field in data:
                 setattr(self, field, data[field])
-class Data(PaginatedAPIMixin, db.Model):
+class SensorData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     pressure1 = db.Column(db.Float)
@@ -57,17 +34,20 @@ class Data(PaginatedAPIMixin, db.Model):
         return data
 
     def from_dict(self, data):
-        attributes = [key for key in Data.__dict__.keys() if not key.startswith('__')]
+        attributes = self.names()
         data["datetime"] = datetime.fromisoformat(data["datetime"])
         for field in attributes:
             if field in data:
                 setattr(self, field, data[field])
+                
+    def names(self):
+        return [key for key in Data.__dict__.keys() if not key.startswith('__')]
 
 role_user_table = db.Table('role_user',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
     db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
 
-class VirtualData(PaginatedAPIMixin, db.Model):
+class VirtualData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     Ball_Valve_Pressure_drop = db.Column(db.Float)
@@ -80,12 +60,16 @@ class VirtualData(PaginatedAPIMixin, db.Model):
     PressureMonitor1 = db.Column(db.Float)
     PressureMonitor2 = db.Column(db.Float)
 
-    def to_dict(self):
+    @classmethod
+    def _names(cls):
+        return [key for key in cls.__dict__.keys() if not key.startswith('__')]
+
+    def _to_dict(self):
         data = {k:v for k, v in VirtualData.__dict__.items() if not k.startswith('__')}
         return data
 
-    def from_dict(self, data):
-        attributes = [key for key in VirtualData.__dict__.keys() if not key.startswith('__')]
+    def _from_dict(self, data):
+        attributes = [key for key in VirtualData.__dict__.keys() if not key.startswith('__') or not key.startswith('_')]
         data["datetime"] = datetime.fromisoformat(data["datetime"])
         for field in attributes:
             if field in data:
