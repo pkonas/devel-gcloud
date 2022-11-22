@@ -20,12 +20,12 @@ def crossdomain(f):
     return wrapped_function
 
 @bp.route('/data/sensor', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_last_data():
     return jsonify(SensorData.query.order_by(SensorData.datetime.desc()).first().to_dict())
 
 @bp.route('/data/sensor/all', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_alldata():
     page = request.args.get('page', 1, type=int)
     per_page = min(request.args.get('per_page', 10, type=int), 100)
@@ -33,7 +33,7 @@ def get_alldata():
     return jsonify(data)
 
 @bp.route('/data/sensor', methods=['POST'])
-@token_auth.login_required
+#@token_auth.login_required
 def add_data():
     jsondata = request.get_json()
     data=SensorData()
@@ -46,12 +46,12 @@ def add_data():
     return response
 
 @bp.route('/data/virtualdata', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_virtualdata():
     return jsonify(VirtualData.query.order_by(VirtualData.id.desc()).first().to_dict())
 
 @bp.route('/data/virtualdata', methods=['POST'])
-@token_auth.login_required
+#@token_auth.login_required
 def post_virtualdata():
     jsondata = request.get_json()
     virtualdata = VirtualData()
@@ -64,19 +64,25 @@ def post_virtualdata():
     return response
 
 @bp.route('/data/inputdata', methods=['GET'])
-@token_auth.login_required
+#@token_auth.login_required
 def get_inputdata():
-    return jsonify(InputData.query.order_by(InputData.id.desc()).first().to_dict())
+    data = InputData.query.order_by(InputData.id.desc()).first()
+    json = data.to_dict()
+    print(json)
+    print(data.valve_value)
+    return json
 
 @bp.route('/data/inputdata', methods=['POST'])
-@token_auth.login_required
+#@token_auth.login_required
 def post_inputdata():
     jsondata = request.get_json()
-    inputdata = InputData()
-    inputdata.from_dict(jsondata)
+    print(jsondata)
+    inputdata = InputData(jsondata)
+    #inputdata.from_dict(jsondata)
+    print(inputdata.valve_value)
     db.session.add(inputdata)
     db.session.commit()
-    response = jsonify(inputdata.to_dict())
+    response = jsonify("ok")
     response.status_code = 201
-    response.headers['Location'] = url_for('api.data', id=inputdata.id)
+    #response.headers['Location'] = url_for('api.data', id=inputdata.id)
     return response

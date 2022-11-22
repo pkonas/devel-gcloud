@@ -1,0 +1,21 @@
+[inputdata] 
+valve_value = "db.Column(db.Float)"
+
+[sensordata] 
+pressure1 = "db.Column(db.Float)"
+pressure2 = "db.Column(db.Float)"
+flow1 = "db.Column(db.Float)"
+flow2 = "db.Column(db.Float)"
+temperature = "db.Column(db.Float)"
+valve_position = "db.Column(db.Float)"
+
+[virtualdata]
+Ball_Valve_Pressure_drop = "db.Column(db.Float)"
+Bend_Pressure_drop = "db.Column(db.Float)"
+Control_Valve_Static_pressure_diff = "db.Column(db.Float)"
+Pump_pressure_rise = "db.Column(db.Float)"
+ManometrMonitor = "db.Column(db.Float)"
+FlowMonitor1 = "db.Column(db.Float)"
+FlowMonitor2 = "db.Column(db.Float)"
+PressureMonitor1 = "db.Column(db.Float)"
+PressureMonitor2 = "db.Column(db.Float)"

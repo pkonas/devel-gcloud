@@ -4,21 +4,21 @@ from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime, timedelta
-from flask import url_for
 
 class InputData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    valve_value = db.Column(db.Integer)
+    valve_value = db.Column(db.Float)
     
+    def __init__(self,data):
+        for k,v in data.items():
+            if k in vars(InputData):
+                print(k)
+                setattr(self,k,v)
+
     def to_dict(self):
-        data = {k:v for k, v in InputData.__dict__.items() if not k.startswith('__')}
+        data = {k:v for k,v in self.__dict__.items() if not k.startswith('__') and not k in ['id', 'to_dict','_sa_instance_state']}
         return data
 
-    def from_dict(self, data):
-        attributes = [key for key in InputData.__dict__.keys() if not key.startswith('__')]
-        for field in attributes:
-            if field in data:
-                setattr(self, field, data[field])
 class SensorData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
@@ -29,23 +29,16 @@ class SensorData(db.Model):
     temperature = db.Column(db.Float)
     valve_position = db.Column(db.Float)
 
+    def __init__(self,data):
+        for k,v in data.items():
+            if k == "datetime":
+                v = datetime.fromisoformat(v)
+            if k in self.__dict__.keys():
+                setattr(self,k,v)
+
     def to_dict(self):
-        data = {k:v for k, v in Data.__dict__.items() if not k.startswith('__')}
+        data = {k:v for k, v in self.__dict__.items() if not k.startswith('__') and not k in ['id', 'to_dict','_sa_instance_state']}
         return data
-
-    def from_dict(self, data):
-        attributes = self.names()
-        data["datetime"] = datetime.fromisoformat(data["datetime"])
-        for field in attributes:
-            if field in data:
-                setattr(self, field, data[field])
-                
-    def names(self):
-        return [key for key in Data.__dict__.keys() if not key.startswith('__')]
-
-role_user_table = db.Table('role_user',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
 
 class VirtualData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -60,21 +53,20 @@ class VirtualData(db.Model):
     PressureMonitor1 = db.Column(db.Float)
     PressureMonitor2 = db.Column(db.Float)
 
-    @classmethod
-    def _names(cls):
-        return [key for key in cls.__dict__.keys() if not key.startswith('__')]
+    def __init__(self,data):
+        for k,v in data.items():
+            if k == "datetime":
+                v = datetime.fromisoformat(v)
+            if k in self.__dict__.keys():
+                setattr(self,k,v)
 
-    def _to_dict(self):
-        data = {k:v for k, v in VirtualData.__dict__.items() if not k.startswith('__')}
+    def to_dict(self):
+        data = {k:v for k, v in VirtualData.__dict__.items() if not k.startswith('__') and not k in ['id', 'to_dict','_sa_instance_state']}
         return data
 
-    def _from_dict(self, data):
-        attributes = [key for key in VirtualData.__dict__.keys() if not key.startswith('__') or not key.startswith('_')]
-        data["datetime"] = datetime.fromisoformat(data["datetime"])
-        for field in attributes:
-            if field in data:
-                setattr(self, field, data[field])
-        return data
+role_user_table = db.Table('role_user',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
