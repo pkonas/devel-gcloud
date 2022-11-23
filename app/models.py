@@ -4,42 +4,22 @@ from app import db, login
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
 from datetime import datetime, timedelta
-from flask import url_for
 
-class PaginatedAPIMixin(object):
-    @staticmethod
-    def to_collection_dict(query, page, per_page, endpoint, **kwargs):
-        resources = query.paginate(page, per_page, False)
-        data = {
-            'items': [item.to_dict() for item in resources.items],
-            '_meta': {
-                'page': page,
-                'per_page': per_page,
-                'total_pages': resources.pages,
-                'total_items': resources.total
-            },
-            '_links': {
-                'self': url_for(endpoint, page=page, per_page=per_page,
-                                **kwargs),
-                'next': url_for(endpoint, page=page + 1, per_page=per_page,
-                                **kwargs) if resources.has_next else None,
-                'prev': url_for(endpoint, page=page - 1, per_page=per_page,
-                                **kwargs) if resources.has_prev else None
-            }
-        }
-        return data
-
-class ValveOpening(PaginatedAPIMixin, db.Model): #InputData
+class InputData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    valve_value = db.Column(db.Integer)
+    valve_value = db.Column(db.Float)
     
+    def __init__(self,data):
+        for k,v in data.items():
+            if k in vars(InputData):
+                print(k)
+                setattr(self,k,v)
+
     def to_dict(self):
-        data = {
-            "datetime" : self.valve_value
-        }
+        data = {k:v for k,v in self.__dict__.items() if not k.startswith('__') and not k in ['id', 'to_dict','_sa_instance_state']}
         return data
 
-class Data(PaginatedAPIMixin, db.Model): #SensorData
+class SensorData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     pressure1 = db.Column(db.Float)
@@ -49,30 +29,18 @@ class Data(PaginatedAPIMixin, db.Model): #SensorData
     temperature = db.Column(db.Float)
     valve_position = db.Column(db.Float)
 
+    def __init__(self,data):
+        for k,v in data.items():
+            if k == "datetime":
+                v = datetime.fromisoformat(v)
+            if k in self.__dict__.keys():
+                setattr(self,k,v)
+
     def to_dict(self):
-        data = {
-            "id" : self.id,
-            "datetime" : self.datetime,
-            "pressure1" : self.pressure1,
-            "pressure2" : self.pressure2,
-            "flow1" : self.flow1,
-            "flow2" : self.flow2,
-            "temperature" : self.temperature,
-            "valve_position" : self.valve_position
-        }
+        data = {k:v for k, v in self.__dict__.items() if not k.startswith('__') and not k in ['id', 'to_dict','_sa_instance_state']}
         return data
 
-    def from_dict(self, data):
-        data["datetime"] = datetime.fromisoformat(data["datetime"])
-        for field in ['datetime', 'pressure1', 'pressure2', 'flow1', 'flow2', 'temperature', 'valve_position']:
-            if field in data:
-                setattr(self, field, data[field])
-
-role_user_table = db.Table('role_user',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
-
-class FmuData(PaginatedAPIMixin, db.Model): #VirtualData
+class VirtualData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     datetime = db.Column(db.DateTime)
     Ball_Valve_Pressure_drop = db.Column(db.Float)
@@ -85,29 +53,20 @@ class FmuData(PaginatedAPIMixin, db.Model): #VirtualData
     PressureMonitor1 = db.Column(db.Float)
     PressureMonitor2 = db.Column(db.Float)
 
-    def from_dict(self, data):
-        data["datetime"] = datetime.fromisoformat(data["datetime"])
-        for field in ['datetime', 'Ball_Valve_Pressure_drop', 'Bend_Pressure_drop',
-                      'Control_Valve_Static_pressure_diff', 'FlowMonitor1', 'FlowMonitor2',
-                      'ManometrMonitor','PressureMonitor1','PressureMonitor2','Pump_pressure_rise']:
-            if field in data:
-                setattr(self, field, data[field])
+    def __init__(self,data):
+        for k,v in data.items():
+            if k == "datetime":
+                v = datetime.fromisoformat(v)
+            if k in self.__dict__.keys():
+                setattr(self,k,v)
 
     def to_dict(self):
-        data = {
-            "id" : self.id,
-            "datetime" : self.datetime,
-            "Ball_Valve_Pressure_drop" : self.Ball_Valve_Pressure_drop,
-            "Bend_Pressure_drop" : self.Bend_Pressure_drop,
-            "Control_Valve_Static_pressure_diff" : self.Control_Valve_Static_pressure_diff,
-            "FlowMonitor1" : self.FlowMonitor1,
-            "FlowMonitor2" : self.FlowMonitor2,
-            "ManometrMonitor" : self.ManometrMonitor,
-            "PressureMonitor1" : self.PressureMonitor1,
-            "PressureMonitor2" : self.PressureMonitor2,
-            "Pump_pressure_rise" : self.Pump_pressure_rise
-        }
+        data = {k:v for k, v in VirtualData.__dict__.items() if not k.startswith('__') and not k in ['id', 'to_dict','_sa_instance_state']}
         return data
+
+role_user_table = db.Table('role_user',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id')))
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
