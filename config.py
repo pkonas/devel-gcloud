@@ -2,8 +2,12 @@ import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 class Config(object):
+    INSTANCE_NAME = "europe-central2:devel-sql"
+    PROJECT_ID = "devel-12345"
+    PUBLIC_IP_ADDRESS = "34.118.47.66"  #"127.0.0.1:3306"
+    PASSWORD = "Bonvolu53"
+    DBNAME = "Data"
+
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'svs-fem-secret-key'
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'app.db')
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
-    REDIS_URL = os.environ.get('REDIS_URL') or 'redis://'
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://root:{PASSWORD}@{PUBLIC_IP_ADDRESS}/{DBNAME}"
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
